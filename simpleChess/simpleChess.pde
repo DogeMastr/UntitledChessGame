@@ -1,4 +1,12 @@
 //basic chess no fancy shit ok cool
+/*
+  SHIT TO FIX:
+    Displaying the right colours
+    updating the type of the tile after moving them
+
+  SHIT TO DO:
+    fukin everything help me ok thanks
+*/
 ArrayList<Tile> chessBoard;
 
 int moveT1; //the number of the tiles to be swapped

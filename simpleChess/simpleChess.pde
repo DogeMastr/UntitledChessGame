@@ -2,7 +2,8 @@
 /*
   SHIT TO FIX:
     Displaying the right colours
-    updating the type of the tile after moving them
+    updating the type of the tile after moving them "correctly everytime"
+    De-selecting tiles
 
   SHIT TO DO:
     fukin everything help me ok thanks
@@ -22,15 +23,10 @@ void setup() {
 
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
-      for (int k = 0; k < 2; k++){
-        if(k == 1){
-          chessBoard.add(new Tile(i*width/10 + width/10, j*width/10 + width/10, true, (int)random(0,9)));
-        } else {
-          chessBoard.add(new Tile(i*width/10 + width/10, j*width/10 + width/10, false, (int)random(0,9)));
-        }
-      }
+      chessBoard.add(new Tile(i*width/10 + width/10, j*width/10 + width/10, true, (int)random(0,9)));
     }
   }
+  println(chessBoard.size());
 }
 
 void draw() {
@@ -62,12 +58,12 @@ void draw() {
 
 void movePeice(){
   //The peice is moving from one space to another
-  chessBoard.get(moveT2).type = chessBoard.get(moveT1).type;
-  chessBoard.get(moveT1).type = 0;
-  println(chessBoard.get(moveT2).type);
+  chessBoard.get(moveT1).type = chessBoard.get(moveT2).type;
+  chessBoard.get(moveT2).type = 0;
   //no longer clicked
   chessBoard.get(moveT1).clicked = false;
   chessBoard.get(moveT2).clicked = false;
+  println("Moved Peice!");
 }
 
 boolean mouseHeld = false;

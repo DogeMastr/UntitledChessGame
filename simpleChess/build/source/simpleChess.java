@@ -15,6 +15,15 @@ import java.io.IOException;
 public class simpleChess extends PApplet {
 
 //basic chess no fancy shit ok cool
+/*
+  SHIT TO FIX:
+    Displaying the right colours
+    updating the type of the tile after moving them "correctly everytime"
+    De-selecting tiles
+
+  SHIT TO DO:
+    fukin everything help me ok thanks
+*/
 ArrayList<Tile> chessBoard;
 
 int moveT1; //the number of the tiles to be swapped
@@ -30,15 +39,10 @@ public void setup() {
 
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
-      for (int k = 0; k < 2; k++){
-        if(k == 1){
-          chessBoard.add(new Tile(i*width/10 + width/10, j*width/10 + width/10, true, (int)random(0,9)));
-        } else {
-          chessBoard.add(new Tile(i*width/10 + width/10, j*width/10 + width/10, false, (int)random(0,9)));
-        }
-      }
+      chessBoard.add(new Tile(i*width/10 + width/10, j*width/10 + width/10, true, (int)random(0,9)));
     }
   }
+  println(chessBoard.size());
 }
 
 public void draw() {
@@ -70,12 +74,12 @@ public void draw() {
 
 public void movePeice(){
   //The peice is moving from one space to another
-  chessBoard.get(moveT2).type = chessBoard.get(moveT1).type;
-  chessBoard.get(moveT1).type = 0;
-  println(chessBoard.get(moveT2).type);
+  chessBoard.get(moveT1).type = chessBoard.get(moveT2).type;
+  chessBoard.get(moveT2).type = 0;
   //no longer clicked
   chessBoard.get(moveT1).clicked = false;
   chessBoard.get(moveT2).clicked = false;
+  println("Moved Peice!");
 }
 
 boolean mouseHeld = false;
@@ -119,8 +123,14 @@ class Tile {
     //if colour is true its a white space
     if(colour){
       fill(255);
+      if(mouseOver() || clicked){
+        fill(191);
+      }
     } else {
       fill(0);
+      if(mouseOver() || clicked){
+        fill(63);
+      }
     }
 
     rect(x, y, tWidth, tWidth);
@@ -143,11 +153,9 @@ class Tile {
   public void select(){
     if(mouseOver() && bMousePressed() && clicked == false){
       clicked = true;
-      println("ok");
     }
     if(mouseOver() && bMousePressed() && clicked == true){
       clicked = false;
-      println("not ok");
     }
   }
 }

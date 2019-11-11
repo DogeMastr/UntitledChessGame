@@ -26,8 +26,14 @@ class Tile {
     //if colour is true its a white space
     if(colour){
       fill(255);
+      if(mouseOver() || clicked){
+        fill(191);
+      }
     } else {
       fill(0);
+      if(mouseOver() || clicked){
+        fill(63);
+      }
     }
 
     rect(x, y, tWidth, tWidth);
@@ -50,11 +56,9 @@ class Tile {
   void select(){
     if(mouseOver() && bMousePressed() && clicked == false){
       clicked = true;
-      println("ok");
     }
     if(mouseOver() && bMousePressed() && clicked == true){
       clicked = false;
-      println("not ok");
     }
   }
 }

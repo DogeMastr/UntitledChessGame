@@ -2,7 +2,6 @@
 /*
   SHIT TO FIX:
     Displaying the right colours
-    updating the type of the tile after moving them "correctly everytime"
     De-selecting tiles
 
   SHIT TO DO:
@@ -23,16 +22,16 @@ void setup() {
 
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
-      chessBoard.add(new Tile(i*width/10 + width/10, j*width/10 + width/10, true, (int)random(0,9)));
+      chessBoard.add(new Tile(i*width/10 + width/10, j*width/10 + width/10, true, (int)random(0,10)));
     }
   }
   println(chessBoard.size());
 }
 
+int clicked = 0; //how many tiles are clicked at the end of the frame
 void draw() {
   background(67,70,82);
   // println(chessBoard.get(0).clicked);
-  int clicked = 0; //how many tiles are clicked at the end of the frame
   for (int i = 0; i < chessBoard.size(); i++) {
     chessBoard.get(i).run();
 
@@ -40,16 +39,15 @@ void draw() {
     if 2 peices clicked = true, move()
     */
     if(chessBoard.get(i).clicked){
-      switch(clicked){
-        case 0:
-          moveT1 = i;
-          clicked++;
-          break;
-        case 1:
-          moveT2 = i;
-          movePeice();
-          clicked = 0;
-          break;
+      if(clicked == 0){
+        moveT1 = i;
+        println(i);
+        clicked++;
+      } else if(moveT1 != i) {
+        moveT2 = i;
+        movePeice();
+        println(i);
+        clicked = 0;
       }
     }
   }
@@ -58,12 +56,12 @@ void draw() {
 
 void movePeice(){
   //The peice is moving from one space to another
-  chessBoard.get(moveT1).type = chessBoard.get(moveT2).type;
-  chessBoard.get(moveT2).type = 0;
+  chessBoard.get(moveT2).type = chessBoard.get(moveT1).type;
+  chessBoard.get(moveT1).type = 0;
   //no longer clicked
   chessBoard.get(moveT1).clicked = false;
   chessBoard.get(moveT2).clicked = false;
-  println("Moved Peice!");
+  println("Moved Peas!!!1!");
 }
 
 boolean mouseHeld = false;

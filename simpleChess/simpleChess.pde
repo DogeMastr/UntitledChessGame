@@ -2,7 +2,6 @@
 /*
   SHIT TO FIX:
     Displaying the right colours
-    De-selecting tiles
 
   SHIT TO DO:
     fukin everything help me ok thanks
@@ -32,6 +31,9 @@ int clicked = 0; //how many tiles are clicked at the end of the frame
 void draw() {
   background(67,70,82);
   // println(chessBoard.get(0).clicked);
+  if(!chessBoard.get(moveT1).clicked){
+    clicked = 0;
+  }
   for (int i = 0; i < chessBoard.size(); i++) {
     chessBoard.get(i).run();
 

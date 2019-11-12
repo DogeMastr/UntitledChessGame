@@ -54,11 +54,8 @@ class Tile {
   }
 
   void select(){
-    if(mouseOver() && bMousePressed() && clicked == false){
-      clicked = true;
-    }
-    if(mouseOver() && bMousePressed() && clicked == true){
-      clicked = false;
+    if(mouseOver() && bMousePressed()){
+      clicked = !clicked;
     }
   }
 }

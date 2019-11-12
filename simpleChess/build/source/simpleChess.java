@@ -48,6 +48,9 @@ int clicked = 0; //how many tiles are clicked at the end of the frame
 public void draw() {
   background(67,70,82);
   // println(chessBoard.get(0).clicked);
+  if(!chessBoard.get(moveT1).clicked){
+    clicked = 0;
+  }
   for (int i = 0; i < chessBoard.size(); i++) {
     chessBoard.get(i).run();
 
@@ -149,11 +152,8 @@ class Tile {
   }
 
   public void select(){
-    if(mouseOver() && bMousePressed() && clicked == false){
-      clicked = true;
-    }
-    if(mouseOver() && bMousePressed() && clicked == true){
-      clicked = false;
+    if(mouseOver() && bMousePressed()){
+      clicked = !clicked;
     }
   }
 }

@@ -56,10 +56,13 @@ void initBoard(){
   }
 }
 
-int clicked = 0; //how many tiles are clicked at the end of the frame
 void draw() {
   background(67,70,82);
-  // println(chessBoard.get(0).clicked);
+  clickPeice();
+}
+
+int clicked = 0; //how many tiles are clicked at the end of the frame
+void clickPeice(){
   if(!chessBoard.get(moveT1).clicked){
     clicked = 0;
   }
@@ -81,7 +84,6 @@ void draw() {
     }
   }
 }
-
 
 void movePeice(){
   //The peice is moving from one space to another

@@ -8,11 +8,11 @@ class Tile {
   boolean clicked;
 
   Tile(float x, float y) {
-    this.type = -1; //8 types of peice + 1 for blank space
     this.x = x;
     this.y = y;
-    tWidth = spacing;
 
+    type = -1; //8 types of peice + 1 for blank space
+    tWidth = spacing;
     clicked = false;
   }
 
@@ -38,8 +38,10 @@ class Tile {
     rect(x, y, tWidth, tWidth);
 
     fill(0,255,0);
-    text(type, x, y);
-
+    if(type != -1){
+      text(type, x, y);
+    }
+    
   }
 
   boolean mouseOver(){

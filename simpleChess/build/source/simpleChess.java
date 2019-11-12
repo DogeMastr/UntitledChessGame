@@ -18,30 +18,62 @@ public class simpleChess extends PApplet {
 /*
   SHIT TO FIX:
     Displaying the right colours
-    De-selecting tiles
 
   SHIT TO DO:
-    fukin everything help me ok thanks
+    Set up the board so the peices start in the right positions
+    check for legal moves
+    turnsr
+    win condition
+    menu and gameover screens
 */
 ArrayList<Tile> chessBoard;
 
 int moveT1; //the number of the tiles to be swapped
 int moveT2;
 
+float spacing;
+
 public void setup() {
   
+  if(width <= height){
+    spacing = width/10;
+  } else {
+    spacing = height/10;
+  }
   rectMode(CORNER);
   textAlign(LEFT,TOP);
-  textSize(width/10);
+  textSize(spacing);
 
   chessBoard = new ArrayList<Tile>();
 
+  initBoard();
+}
+
+public void initBoard(){
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
-      chessBoard.add(new Tile(i*width/10 + width/10, j*width/10 + width/10, true, (int)random(0,10)));
+        chessBoard.add(new Tile(j*spacing + spacing, i*spacing + spacing));
     }
   }
-  println(chessBoard.size());
+
+  boolean previous = false;
+  for(int i = 0; i < chessBoard.size(); i++){
+    chessBoard.get(i).colour = previous;
+    if((i+1)%8 != 0){
+      previous = !previous;
+      println("tru");
+    } else {
+      println("fal");
+    }
+
+    if(i <= 7){
+      chessBoard.get(i).type = i;
+    } else if(i <= 15){
+      chessBoard.get(i).type = 8;
+    } else if(i >= 48){
+      chessBoard.get(i).type = 8;
+    }
+  }
 }
 
 int clicked = 0; //how many tiles are clicked at the end of the frame
@@ -60,12 +92,10 @@ public void draw() {
     if(chessBoard.get(i).clicked){
       if(clicked == 0){
         moveT1 = i;
-        println(i);
         clicked++;
       } else if(moveT1 != i) {
         moveT2 = i;
         movePeice();
-        println(i);
         clicked = 0;
       }
     }
@@ -76,11 +106,10 @@ public void draw() {
 public void movePeice(){
   //The peice is moving from one space to another
   chessBoard.get(moveT2).type = chessBoard.get(moveT1).type;
-  chessBoard.get(moveT1).type = 0;
+  chessBoard.get(moveT1).type = -1;
   //no longer clicked
   chessBoard.get(moveT1).clicked = false;
   chessBoard.get(moveT2).clicked = false;
-  println("Moved Peas!!!1!");
 }
 
 boolean mouseHeld = false;
@@ -105,12 +134,11 @@ class Tile {
 
   boolean clicked;
 
-  Tile(float x, float y, boolean _colour, int type) {
-    this.type = type; //8 types of peice + 1 for blank space
+  Tile(float x, float y) {
+    this.type = -1; //8 types of peice + 1 for blank space
     this.x = x;
     this.y = y;
-    this.colour = _colour;
-    tWidth = 80;
+    tWidth = spacing;
 
     clicked = false;
   }
@@ -137,9 +165,8 @@ class Tile {
     rect(x, y, tWidth, tWidth);
 
     fill(0,255,0);
-    if (type != 0) {
-      text(type, x, y);
-    }
+    text(type, x, y);
+
   }
 
   public boolean mouseOver(){
@@ -157,7 +184,7 @@ class Tile {
     }
   }
 }
-  public void settings() {  size(800, 800); }
+  public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "simpleChess" };
     if (passedArgs != null) {

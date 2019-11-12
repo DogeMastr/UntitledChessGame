@@ -17,10 +17,9 @@ public class simpleChess extends PApplet {
 //basic chess no fancy shit ok cool
 /*
   SHIT TO FIX:
-    Displaying the right colours
+  Set up the board so the peices start in the right positions
 
   SHIT TO DO:
-    Set up the board so the peices start in the right positions
     check for legal moves
     turnsr
     win condition
@@ -61,25 +60,44 @@ public void initBoard(){
     chessBoard.get(i).colour = previous;
     if((i+1)%8 != 0){
       previous = !previous;
-      println("tru");
-    } else {
-      println("fal");
     }
 
-    if(i <= 7){
-      chessBoard.get(i).type = i;
-    } else if(i <= 15){
-      chessBoard.get(i).type = 8;
+    if(i <= 15){
+      chessBoard.get(i).team = true;
+      chessBoard.get(i).type = 6;
     } else if(i >= 48){
-      chessBoard.get(i).type = 8;
+      chessBoard.get(i).team = false;
+      chessBoard.get(i).type = 6;
     }
+
+    chessBoard.get(0).type = 1;
+    chessBoard.get(1).type = 2;
+    chessBoard.get(2).type = 3;
+    chessBoard.get(3).type = 5;
+    chessBoard.get(4).type = 4;
+    chessBoard.get(5).type = 3;
+    chessBoard.get(6).type = 2;
+    chessBoard.get(7).type = 1;
+
+    chessBoard.get(56).type = 1;
+    chessBoard.get(57).type = 2;
+    chessBoard.get(58).type = 3;
+    chessBoard.get(59).type = 4;
+    chessBoard.get(60).type = 5;
+    chessBoard.get(61).type = 3;
+    chessBoard.get(62).type = 2;
+    chessBoard.get(63).type = 1;
+
   }
 }
 
-int clicked = 0; //how many tiles are clicked at the end of the frame
 public void draw() {
   background(67,70,82);
-  // println(chessBoard.get(0).clicked);
+  clickPeice();
+}
+
+int clicked = 0; //how many tiles are clicked at the end of the frame
+public void clickPeice(){
   if(!chessBoard.get(moveT1).clicked){
     clicked = 0;
   }
@@ -102,11 +120,14 @@ public void draw() {
   }
 }
 
-
 public void movePeice(){
   //The peice is moving from one space to another
   chessBoard.get(moveT2).type = chessBoard.get(moveT1).type;
   chessBoard.get(moveT1).type = -1;
+
+  //keeps the same team
+  chessBoard.get(moveT2).team = chessBoard.get(moveT1).team;
+
   //no longer clicked
   chessBoard.get(moveT1).clicked = false;
   chessBoard.get(moveT2).clicked = false;
@@ -130,16 +151,17 @@ class Tile {
   float y;
   float tWidth;
   int type;
-  boolean colour;
+  boolean team;
 
+  boolean colour;
   boolean clicked;
 
   Tile(float x, float y) {
-    this.type = -1; //8 types of peice + 1 for blank space
     this.x = x;
     this.y = y;
-    tWidth = spacing;
 
+    type = -1; //8 types of peice + 1 for blank space
+    tWidth = spacing;
     clicked = false;
   }
 
@@ -164,8 +186,15 @@ class Tile {
 
     rect(x, y, tWidth, tWidth);
 
-    fill(0,255,0);
-    text(type, x, y);
+    if(team){
+      fill(0,255,0);
+    } else {
+      fill(255,0,0);
+    }
+
+    if(type != -1){
+      text(type, x, y);
+    }
 
   }
 
@@ -184,7 +213,7 @@ class Tile {
     }
   }
 }
-  public void settings() {  fullScreen(); }
+  public void settings() {  size(800,800); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "simpleChess" };
     if (passedArgs != null) {

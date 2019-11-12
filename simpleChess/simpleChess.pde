@@ -1,7 +1,6 @@
 //basic chess no fancy shit ok cool
 /*
   SHIT TO FIX:
-  Set up the board so the peices start in the right positions
 
   SHIT TO DO:
     check for legal moves
@@ -17,7 +16,7 @@ int moveT2;
 float spacing;
 
 void setup() {
-  fullScreen();
+  size(800,800);
   if(width <= height){
     spacing = width/10;
   } else {
@@ -46,13 +45,32 @@ void initBoard(){
       previous = !previous;
     }
 
-    if(i <= 7){
-      chessBoard.get(i).type = i;
-    } else if(i <= 15){
-      chessBoard.get(i).type = 8;
+    if(i <= 15){
+      chessBoard.get(i).team = true;
+      chessBoard.get(i).type = 6;
     } else if(i >= 48){
-      chessBoard.get(i).type = 8;
+      chessBoard.get(i).team = false;
+      chessBoard.get(i).type = 6;
     }
+
+    chessBoard.get(0).type = 1;
+    chessBoard.get(1).type = 2;
+    chessBoard.get(2).type = 3;
+    chessBoard.get(3).type = 5;
+    chessBoard.get(4).type = 4;
+    chessBoard.get(5).type = 3;
+    chessBoard.get(6).type = 2;
+    chessBoard.get(7).type = 1;
+
+    chessBoard.get(56).type = 1;
+    chessBoard.get(57).type = 2;
+    chessBoard.get(58).type = 3;
+    chessBoard.get(59).type = 4;
+    chessBoard.get(60).type = 5;
+    chessBoard.get(61).type = 3;
+    chessBoard.get(62).type = 2;
+    chessBoard.get(63).type = 1;
+
   }
 }
 
@@ -89,6 +107,10 @@ void movePeice(){
   //The peice is moving from one space to another
   chessBoard.get(moveT2).type = chessBoard.get(moveT1).type;
   chessBoard.get(moveT1).type = -1;
+
+  //keeps the same team
+  chessBoard.get(moveT2).team = chessBoard.get(moveT1).team;
+
   //no longer clicked
   chessBoard.get(moveT1).clicked = false;
   chessBoard.get(moveT2).clicked = false;

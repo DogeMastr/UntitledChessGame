@@ -3,8 +3,9 @@ class Tile {
   float y;
   float tWidth;
   int type;
-  boolean colour;
+  boolean team;
 
+  boolean colour;
   boolean clicked;
 
   Tile(float x, float y) {
@@ -37,11 +38,16 @@ class Tile {
 
     rect(x, y, tWidth, tWidth);
 
-    fill(0,255,0);
+    if(team){
+      fill(0,255,0);
+    } else {
+      fill(255,0,0);
+    }
+
     if(type != -1){
       text(type, x, y);
     }
-    
+
   }
 
   boolean mouseOver(){

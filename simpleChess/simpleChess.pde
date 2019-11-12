@@ -16,7 +16,8 @@ int moveT2;
 float spacing;
 
 void setup() {
-  size(800,800);
+  //size(800,800);
+  fullScreen();
   if(width <= height){
     spacing = width/10;
   } else {
@@ -47,10 +48,10 @@ void initBoard(){
 
     if(i <= 15){
       chessBoard.get(i).team = true;
-      chessBoard.get(i).type = 6;
+      chessBoard.get(i).type = 0;
     } else if(i >= 48){
       chessBoard.get(i).team = false;
-      chessBoard.get(i).type = 6;
+      chessBoard.get(i).type = 0;
     }
 
     chessBoard.get(0).type = 1;

@@ -17,7 +17,6 @@ public class simpleChess extends PApplet {
 //basic chess no fancy shit ok cool
 /*
   SHIT TO FIX:
-  Set up the board so the peices start in the right positions
 
   SHIT TO DO:
     check for legal moves
@@ -64,10 +63,10 @@ public void initBoard(){
 
     if(i <= 15){
       chessBoard.get(i).team = true;
-      chessBoard.get(i).type = 6;
+      chessBoard.get(i).type = 0;
     } else if(i >= 48){
       chessBoard.get(i).team = false;
-      chessBoard.get(i).type = 6;
+      chessBoard.get(i).type = 0;
     }
 
     chessBoard.get(0).type = 1;

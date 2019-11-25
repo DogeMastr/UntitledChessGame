@@ -7,7 +7,7 @@ class Tile {
 
   boolean colour;
   boolean selected;
-  
+
   boolean highlighted;
   Tile(float x, float y) {
     this.x = x;
@@ -37,6 +37,13 @@ class Tile {
       }
     }
 
+    if(highlighted){
+      if(colour){
+        fill(170,170,255);
+      } else {
+        fill(86,86,171);
+      }
+    }
     rect(x, y, tWidth, tWidth);
 
     if(team == 1){

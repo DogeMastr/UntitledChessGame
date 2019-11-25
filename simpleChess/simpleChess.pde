@@ -80,10 +80,11 @@ void initBoard(){
 
 void draw() {
   background(67,70,82);
-  clickPeice();
   for (int i = 0; i < chessBoard.size(); i++) {
     chessBoard.get(i).run();
   }
+  clickPeice();
+  showMoves();
 }
 
 int clicked = 0; //how many tiles are clicked at the end of the frame
@@ -102,7 +103,6 @@ void clickPeice(){
 */
 
   for (int i = 0; i < chessBoard.size(); i++) {
-    println(clicked);
     if(chessBoard.get(i).selected){
       switch(clicked){
         case 0:
@@ -131,20 +131,74 @@ void clickPeice(){
 
 void showMoves(){
   //this shows your posible moves by turning the tile a shade of green
-  if(clicked == 1){
+  if(moveT1 != -1 && chessBoard.get(moveT1).selected){
     //first peice is selected
     for(int i = 0; i < chessBoard.size(); i++){
       if(moveT1 != i){
         switch(chessBoard.get(moveT1).type){
           case 0: //pawn
             break;
-          case 1: //rook
           case 2: //knight
-          case 3: //bishop
+            if(chessBoard.get(i).x == chessBoard.get(moveT1).x + (chessBoard.get(i).tWidth)*2){
+              if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(i).tWidth){
+                chessBoard.get(i).highlighted = true;
+              } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(i).tWidth){
+                chessBoard.get(i).highlighted = true;
+              }
+            }
+            if(chessBoard.get(i).x == chessBoard.get(moveT1).x - (chessBoard.get(i).tWidth)*2){
+              if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(i).tWidth){
+                chessBoard.get(i).highlighted = true;
+              } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(i).tWidth){
+                chessBoard.get(i).highlighted = true;
+              }
+            }
+            if(chessBoard.get(i).y == chessBoard.get(moveT1).y + (chessBoard.get(i).tWidth)*2){
+              if(chessBoard.get(i).x == chessBoard.get(moveT1).x + chessBoard.get(i).tWidth){
+                chessBoard.get(i).highlighted = true;
+              } else if(chessBoard.get(i).x == chessBoard.get(moveT1).x - chessBoard.get(i).tWidth){
+                chessBoard.get(i).highlighted = true;
+              }
+            }
+            if(chessBoard.get(i).y == chessBoard.get(moveT1).y - (chessBoard.get(i).tWidth)*2){
+              if(chessBoard.get(i).x == chessBoard.get(moveT1).x + chessBoard.get(i).tWidth){
+                chessBoard.get(i).highlighted = true;
+              } else if(chessBoard.get(i).x == chessBoard.get(moveT1).x - chessBoard.get(i).tWidth){
+                chessBoard.get(i).highlighted = true;
+              }
+            }
+            break;
           case 4: //queen
+          case 1: //rook
+            if(chessBoard.get(i).x == chessBoard.get(moveT1).x){
+              chessBoard.get(i).highlighted = true;
+              } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y){
+                chessBoard.get(i).highlighted = true;
+              }
+              if(chessBoard.get(moveT1).type == 1){
+                break;
+              }
+          case 3: //bishop
+            for(int j = 0; j > chessBoard.get(0).x + chessBoard.get(moveT1).tWidth*8 - chessBoard.get(moveT1).x; j++){
+              if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth*j){
+                chessBoard.get(i).highlighted = true;
+              }
+              if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth*j){
+                chessBoard.get(i).highlighted = true;
+              }
+            }
+            if(chessBoard.get(moveT1).type == 3){
+              break;
+            }
           case 5: //king
+          if(chessBoard.get(i).y == chessBoard.get(moveT1).y)
+          break;
         }
       }
+    }
+  } else {
+    for(int i = 0; i < chessBoard.size(); i++){
+      chessBoard.get(i).highlighted = false;
     }
   }
 }
@@ -168,7 +222,10 @@ boolean checkLegalMove(int tile1, int tile2){
   if(chessBoard.get(tile1).team == chessBoard.get(tile2).team){
     return false;
   }
-  return true;
+  if(chessBoard.get(tile2).highlighted){
+    return true;
+  }
+  return false;
 }
 
 boolean mouseHeld = false;

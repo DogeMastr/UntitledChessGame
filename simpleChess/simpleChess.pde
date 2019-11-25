@@ -1,23 +1,24 @@
 //basic chess no fancy shit ok cool
 /*
-  SHIT TO FIX:
-
-  SHIT TO DO:
+  SHIT IM DOING:
+    So you cant move a blank space to take a peice
     check for legal moves
+
+  SHIT LEFT TO DO:
     turnsr
     win condition
     menu and gameover screens
 */
 ArrayList<Tile> chessBoard;
 
-int moveT1; //the number of the tiles to be swapped
-int moveT2;
+int moveT1 = -1; //the number of the tiles to be swapped
+int moveT2 = -1;
 
 float spacing;
 
 void setup() {
-  //size(800,800);
-  fullScreen();
+  size(800,800);
+  //fullScreen();
   if(width <= height){
     spacing = width/10;
   } else {
@@ -47,11 +48,13 @@ void initBoard(){
     }
 
     if(i <= 15){
-      chessBoard.get(i).team = true;
+      chessBoard.get(i).team = 1;
       chessBoard.get(i).type = 0;
     } else if(i >= 48){
-      chessBoard.get(i).team = false;
+      chessBoard.get(i).team = 0;
       chessBoard.get(i).type = 0;
+    } else if(i > 15){
+      chessBoard.get(i).team = -1;
     }
 
     chessBoard.get(0).type = 1;
@@ -78,43 +81,94 @@ void initBoard(){
 void draw() {
   background(67,70,82);
   clickPeice();
+  for (int i = 0; i < chessBoard.size(); i++) {
+    chessBoard.get(i).run();
+  }
 }
 
 int clicked = 0; //how many tiles are clicked at the end of the frame
 void clickPeice(){
-  if(!chessBoard.get(moveT1).clicked){
-    clicked = 0;
-  }
-  for (int i = 0; i < chessBoard.size(); i++) {
-    chessBoard.get(i).run();
-
-    /*
-    if 2 peices clicked = true, move()
-    */
-    if(chessBoard.get(i).clicked){
-      if(clicked == 0){
-        moveT1 = i;
-        clicked++;
-      } else if(moveT1 != i) {
-        moveT2 = i;
+/*
+  If tile pressed:
+    Check how many tiles are pressed
+      if 0:
+        Check if its a blank space
+        if so then stop
+        else
+        record moveT1
+      if 1:
+        record moveT2
         movePeice();
-        clicked = 0;
+*/
+
+  for (int i = 0; i < chessBoard.size(); i++) {
+    println(clicked);
+    if(chessBoard.get(i).selected){
+      switch(clicked){
+        case 0:
+          if(chessBoard.get(i).type == -1){
+            chessBoard.get(i).selected = false;
+            break;
+          }
+          moveT1 = i;
+          clicked++;
+          break;
+        case 1:
+          if(moveT1 == i && moveT1 != -1){
+            break;
+          }
+          moveT2 = i;
+          clicked++;
+          break;
+        case 2:
+          movePeice();
+          clicked = 0;
+          break;
+      }
+    }
+  }
+}
+
+void showMoves(){
+  //this shows your posible moves by turning the tile a shade of green
+  if(clicked == 1){
+    //first peice is selected
+    for(int i = 0; i < chessBoard.size(); i++){
+      if(moveT1 != i){
+        switch(chessBoard.get(moveT1).type){
+          case 0: //pawn
+            break;
+          case 1: //rook
+          case 2: //knight
+          case 3: //bishop
+          case 4: //queen
+          case 5: //king
+        }
       }
     }
   }
 }
 
 void movePeice(){
-  //The peice is moving from one space to another
-  chessBoard.get(moveT2).type = chessBoard.get(moveT1).type;
-  chessBoard.get(moveT1).type = -1;
-
-  //keeps the same team
-  chessBoard.get(moveT2).team = chessBoard.get(moveT1).team;
-
+  //check of they are on different teams
+  if(checkLegalMove(moveT1, moveT2)){
+    //The peice is moving from one space to another
+    chessBoard.get(moveT2).type = chessBoard.get(moveT1).type;
+    chessBoard.get(moveT1).type = -1;
+    //keeps the same team
+    chessBoard.get(moveT2).team = chessBoard.get(moveT1).team;
+    chessBoard.get(moveT1).team = -1;
+  }
   //no longer clicked
-  chessBoard.get(moveT1).clicked = false;
-  chessBoard.get(moveT2).clicked = false;
+  chessBoard.get(moveT1).selected = false;
+  chessBoard.get(moveT2).selected = false;
+}
+
+boolean checkLegalMove(int tile1, int tile2){
+  if(chessBoard.get(tile1).team == chessBoard.get(tile2).team){
+    return false;
+  }
+  return true;
 }
 
 boolean mouseHeld = false;

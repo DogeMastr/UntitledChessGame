@@ -3,18 +3,19 @@ class Tile {
   float y;
   float tWidth;
   int type;
-  boolean team;
+  int team;
 
   boolean colour;
-  boolean clicked;
-
+  boolean selected;
+  
+  boolean highlighted;
   Tile(float x, float y) {
     this.x = x;
     this.y = y;
 
     type = -1; //8 types of peice + 1 for blank space
     tWidth = spacing;
-    clicked = false;
+    selected = false;
   }
 
   void run() {
@@ -26,19 +27,19 @@ class Tile {
     //if colour is true its a white space
     if(colour){
       fill(255);
-      if(mouseOver() || clicked){
+      if(mouseOver() || selected){
         fill(191);
       }
     } else {
       fill(0);
-      if(mouseOver() || clicked){
+      if(mouseOver() || selected){
         fill(63);
       }
     }
 
     rect(x, y, tWidth, tWidth);
 
-    if(team){
+    if(team == 1){
       fill(0,255,0);
     } else {
       fill(255,0,0);
@@ -61,7 +62,7 @@ class Tile {
 
   void select(){
     if(mouseOver() && bMousePressed()){
-      clicked = !clicked;
+      selected = !selected;
     }
   }
 }

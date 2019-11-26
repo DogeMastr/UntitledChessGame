@@ -137,37 +137,70 @@ void showMoves(){
       if(moveT1 != i){
         switch(chessBoard.get(moveT1).type){
           case 0: //pawn
-          /*
-            if x = tile.x
-              if team green
-                if y = tile.y + 1
-                  true
-              if team red
-                if y = tile.y - 1
-                  true
+            /*
+              if x = tile.x
+                if team green
+                  if y = tile.y + 1
+                    true
+                if team red
+                  if y = tile.y - 1
+                    true
 
-                  wowow
-                  sudo
-                  so for the starting position for pawns, you want to make a new boolean called awoken = false.
+                    wowow
+                    sudo
+                    so for the starting position for pawns, you want to make a new boolean called awoken = false.
 
-          */
-          if(chessBoard.get(i).x == chessBoard.get(moveT1).x){
-            if(chessBoard.get(moveT1).team == 1){
-              if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth){
-                chessBoard.get(i).highlighted = true;
-              } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth*2 && chessBoard.get(moveT1).awoken == false){
-                chessBoard.get(i).highlighted = true;
-              }
-            } else {
-              if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth){
-                chessBoard.get(i).highlighted = true;
-              } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth*2 && chessBoard.get(moveT1).awoken == false){
-                chessBoard.get(i).highlighted = true;
+            */
+            if(chessBoard.get(i).x == chessBoard.get(moveT1).x){
+              if(chessBoard.get(moveT1).team == 1){
+                if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth){
+                  if(chessBoard.get(i).type == -1){
+                    chessBoard.get(i).highlighted = true;
+                  }
+                } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth*2 && chessBoard.get(moveT1).awoken == false){
+                  if(chessBoard.get(i).type == -1){
+                    chessBoard.get(i).highlighted = true;
+                  }
+                }
+              } else {
+                if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth){
+                  if(chessBoard.get(i).type == -1){
+                    chessBoard.get(i).highlighted = true;
+                  }
+                } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth*2 && chessBoard.get(moveT1).awoken == false){
+                  if(chessBoard.get(i).type == -1){
+                    chessBoard.get(i).highlighted = true;
+                  }
+                }
               }
             }
-          }
+            //for taking peices diagonally
+            if(chessBoard.get(moveT1).team == 1){
+              if(chessBoard.get(i).type != -1 && chessBoard.get(i).team != 1){
+                if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth){
+                  if(chessBoard.get(i).x == chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
+                    chessBoard.get(i).highlighted = true;
+                  }
+                  if(chessBoard.get(i).x == chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth){
+                    chessBoard.get(i).highlighted = true;
+                  }
+                }
+              }
+            } else if(chessBoard.get(i).type != -1 && chessBoard.get(i).team != 0){
+              if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth){
+                if(chessBoard.get(i).x == chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
+                  chessBoard.get(i).highlighted = true;
+                }
+                if(chessBoard.get(i).x == chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth){
+                  chessBoard.get(i).highlighted = true;
+                }
+              }
+            }
             break;
           case 2: //knight
+            if(chessBoard.get(i).team == chessBoard.get(moveT1).team){
+              break;
+            }
             if(chessBoard.get(i).x == chessBoard.get(moveT1).x + (chessBoard.get(i).tWidth)*2){
               if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(i).tWidth){
                 chessBoard.get(i).highlighted = true;
@@ -197,16 +230,16 @@ void showMoves(){
               }
             }
             break;
-          case 4: //queen
+          case 4: //queen (is before the others so it can just copy them)
           case 1: //rook
             if(chessBoard.get(i).x == chessBoard.get(moveT1).x){
               chessBoard.get(i).highlighted = true;
-              } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y){
+            } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y){
                 chessBoard.get(i).highlighted = true;
-              }
-              if(chessBoard.get(moveT1).type == 1){
-                break;
-              }
+            }
+            if(chessBoard.get(moveT1).type == 1){ //allows the queen to copy the bishop without extra code
+              break;
+            }
           case 3: //bishop
             /*
               for every peice to the right
@@ -234,25 +267,28 @@ void showMoves(){
               break;
             }
           case 5: //king
-          if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth){
-            if(chessBoard.get(i).x >= chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth
-            && chessBoard.get(i).x <= chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
-              chessBoard.get(i).highlighted = true;
+            if(chessBoard.get(i).team == chessBoard.get(moveT1).team){
+              break;
             }
-          }
-          if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth){
-            if(chessBoard.get(i).x >= chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth
-            && chessBoard.get(i).x <= chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
-              chessBoard.get(i).highlighted = true;
+            if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth){
+              if(chessBoard.get(i).x >= chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth
+              && chessBoard.get(i).x <= chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
+                chessBoard.get(i).highlighted = true;
+              }
             }
-          }
-          if(chessBoard.get(i).y == chessBoard.get(moveT1).y){
-            if(chessBoard.get(i).x == chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth
-            || chessBoard.get(i).x == chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
-              chessBoard.get(i).highlighted = true;
+            if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth){
+              if(chessBoard.get(i).x >= chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth
+              && chessBoard.get(i).x <= chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
+                chessBoard.get(i).highlighted = true;
+              }
             }
-          }
-          break;
+            if(chessBoard.get(i).y == chessBoard.get(moveT1).y){
+              if(chessBoard.get(i).x == chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth
+              || chessBoard.get(i).x == chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
+                chessBoard.get(i).highlighted = true;
+              }
+            }
+            break;
         }
       }
     }

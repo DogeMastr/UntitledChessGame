@@ -1,8 +1,8 @@
 //basic chess no fancy shit ok cool
 /*
   SHIT IM DOING:
-    So you cant move a blank space to take a peice
-    check for legal moves
+    Making peices not able to jump over eachother
+    Pawns can take diagonally
 
   SHIT LEFT TO DO:
     turnsr

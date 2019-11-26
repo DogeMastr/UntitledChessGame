@@ -9,18 +9,25 @@ class Tile {
   boolean selected;
 
   boolean highlighted;
+
+  boolean awoken;
   Tile(float x, float y) {
     this.x = x;
     this.y = y;
 
-    type = -1; //8 types of peice + 1 for blank space
+    type = -1; //8 types of peice -1 for a blank space
     tWidth = spacing;
     selected = false;
+    awoken = false;
   }
 
   void run() {
     display();
     select();
+
+    if(type == -1){
+      team = -1;
+    }
   }
 
   void display() {

@@ -40,7 +40,7 @@ void initBoard(){
     }
   }
 
-  boolean previous = false;
+  boolean previous = true;
   for(int i = 0; i < chessBoard.size(); i++){
     chessBoard.get(i).colour = previous;
     if((i+1)%8 != 0){
@@ -89,18 +89,18 @@ void draw() {
 
 int clicked = 0; //how many tiles are clicked at the end of the frame
 void clickPeice(){
-/*
-  If tile pressed:
-    Check how many tiles are pressed
-      if 0:
-        Check if its a blank space
-        if so then stop
-        else
-        record moveT1
-      if 1:
-        record moveT2
-        movePeice();
-*/
+  /*
+    If tile pressed:
+      Check how many tiles are pressed
+        if 0:
+          Check if its a blank space
+          if so then stop
+          else
+          record moveT1
+        if 1:
+          record moveT2
+          movePeice();
+  */
 
   for (int i = 0; i < chessBoard.size(); i++) {
     if(chessBoard.get(i).selected){
@@ -137,6 +137,35 @@ void showMoves(){
       if(moveT1 != i){
         switch(chessBoard.get(moveT1).type){
           case 0: //pawn
+          /*
+            if x = tile.x
+              if team green
+                if y = tile.y + 1
+                  true
+              if team red
+                if y = tile.y - 1
+                  true
+
+                  wowow
+                  sudo
+                  so for the starting position for pawns, you want to make a new boolean called awoken = false.
+
+          */
+          if(chessBoard.get(i).x == chessBoard.get(moveT1).x){
+            if(chessBoard.get(moveT1).team == 1){
+              if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth){
+                chessBoard.get(i).highlighted = true;
+              } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth*2 && chessBoard.get(moveT1).awoken == false){
+                chessBoard.get(i).highlighted = true;
+              }
+            } else {
+              if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth){
+                chessBoard.get(i).highlighted = true;
+              } else if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth*2 && chessBoard.get(moveT1).awoken == false){
+                chessBoard.get(i).highlighted = true;
+              }
+            }
+          }
             break;
           case 2: //knight
             if(chessBoard.get(i).x == chessBoard.get(moveT1).x + (chessBoard.get(i).tWidth)*2){
@@ -179,19 +208,50 @@ void showMoves(){
                 break;
               }
           case 3: //bishop
-            for(int j = 0; j > chessBoard.get(0).x + chessBoard.get(moveT1).tWidth*8 - chessBoard.get(moveT1).x; j++){
-              if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth*j){
-                chessBoard.get(i).highlighted = true;
+            /*
+              for every peice to the right
+                check for x = piece.x & y = i*height
+            */
+            for(int j = 1; j <= 8; j++){
+              if(chessBoard.get(i).y == chessBoard.get(moveT1).y + (j-1)*chessBoard.get(0).tWidth){
+                if(chessBoard.get(i).x == chessBoard.get(moveT1).x + (j-1)*chessBoard.get(0).tWidth){
+                  chessBoard.get(i).highlighted = true;
+                }
+                if(chessBoard.get(i).x == chessBoard.get(moveT1).x - (j-1)*chessBoard.get(0).tWidth){
+                  chessBoard.get(i).highlighted = true;
+                }
               }
-              if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth*j){
-                chessBoard.get(i).highlighted = true;
+              if(chessBoard.get(i).y == chessBoard.get(moveT1).y - (j-1)*chessBoard.get(0).tWidth){
+                if(chessBoard.get(i).x == chessBoard.get(moveT1).x + (j-1)*chessBoard.get(0).tWidth){
+                  chessBoard.get(i).highlighted = true;
+                }
+                if(chessBoard.get(i).x == chessBoard.get(moveT1).x - (j-1)*chessBoard.get(0).tWidth){
+                  chessBoard.get(i).highlighted = true;
+                }
               }
             }
             if(chessBoard.get(moveT1).type == 3){
               break;
             }
           case 5: //king
-          if(chessBoard.get(i).y == chessBoard.get(moveT1).y)
+          if(chessBoard.get(i).y == chessBoard.get(moveT1).y - chessBoard.get(moveT1).tWidth){
+            if(chessBoard.get(i).x >= chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth
+            && chessBoard.get(i).x <= chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
+              chessBoard.get(i).highlighted = true;
+            }
+          }
+          if(chessBoard.get(i).y == chessBoard.get(moveT1).y + chessBoard.get(moveT1).tWidth){
+            if(chessBoard.get(i).x >= chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth
+            && chessBoard.get(i).x <= chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
+              chessBoard.get(i).highlighted = true;
+            }
+          }
+          if(chessBoard.get(i).y == chessBoard.get(moveT1).y){
+            if(chessBoard.get(i).x == chessBoard.get(moveT1).x - chessBoard.get(moveT1).tWidth
+            || chessBoard.get(i).x == chessBoard.get(moveT1).x + chessBoard.get(moveT1).tWidth){
+              chessBoard.get(i).highlighted = true;
+            }
+          }
           break;
         }
       }
@@ -212,6 +272,8 @@ void movePeice(){
     //keeps the same team
     chessBoard.get(moveT2).team = chessBoard.get(moveT1).team;
     chessBoard.get(moveT1).team = -1;
+    //wakes the peice (for checking pawns first move)
+    chessBoard.get(moveT2).awoken = true;
   }
   //no longer clicked
   chessBoard.get(moveT1).selected = false;

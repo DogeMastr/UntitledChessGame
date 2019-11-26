@@ -25,57 +25,56 @@ class Tile {
     display();
     select();
 
-    if(type == -1){
+    if (type == -1) {
       team = -1;
     }
   }
 
   void display() {
     //if colour is true its a white space
-    if(colour){
+    if (colour) {
       fill(255);
-      if(mouseOver() || selected){
+      if (mouseOver() || selected) {
         fill(191);
       }
     } else {
       fill(0);
-      if(mouseOver() || selected){
+      if (mouseOver() || selected) {
         fill(63);
       }
     }
 
-    if(highlighted){
-      if(colour){
-        fill(170,170,255);
+    if (highlighted) {
+      if (colour) {
+        fill(170, 170, 255);
       } else {
-        fill(86,86,171);
+        fill(86, 86, 171);
       }
     }
     rect(x, y, tWidth, tWidth);
 
-    if(team == 1){
-      fill(0,255,0);
+    if (team == 1) {
+      fill(0, 255, 0);
     } else {
-      fill(255,0,0);
+      fill(255, 0, 0);
     }
 
-    if(type != -1){
+    if (type != -1) {
       text(type, x, y);
     }
-
   }
 
-  boolean mouseOver(){
-    if(mouseX > x && mouseX < x + tWidth){
-      if(mouseY > y && mouseY < y + tWidth){
+  boolean mouseOver() {
+    if (mouseX > x && mouseX < x + tWidth) {
+      if (mouseY > y && mouseY < y + tWidth) {
         return true;
       }
     }
     return false;
   }
 
-  void select(){
-    if(mouseOver() && bMousePressed()){
+  void select() {
+    if (mouseOver() && bMousePressed()) {
       selected = !selected;
     }
   }

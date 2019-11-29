@@ -1,24 +1,26 @@
 //basic chess no fancy shit ok cool
 /*
-  SHIT IM DOING:
- Making peices not able to jump over eachother
- Pawns can take diagonally
- 
+ SHIT IM DOING:
+  Making peices not able to jump over eachother
+  Making the rook and bishop highlight the correct tiles
+
  SHIT LEFT TO DO:
- turnsr
- win condition
- menu and gameover screens
+  turns
+  win condition
+  menu and gameover screens
  */
 ArrayList<Tile> chessBoard;
 
 int moveT1 = -1; //the number of the tiles to be swapped
 int moveT2 = -1;
+int clicked = 0; //how many tiles are clicked at the end of the frame
 
 float spacing;
+boolean mouseHeld = false;
 
 void setup() {
-  //size(800, 800);
-  fullScreen();
+  size(800, 800);
+  //fullScreen();
   if (width <= height) {
     spacing = width/10;
   } else {
@@ -60,8 +62,8 @@ void initBoard() {
     chessBoard.get(0).type = 1;
     chessBoard.get(1).type = 2;
     chessBoard.get(2).type = 3;
-    chessBoard.get(3).type = 5;
-    chessBoard.get(4).type = 4;
+    chessBoard.get(3).type = 4;
+    chessBoard.get(4).type = 5;
     chessBoard.get(5).type = 3;
     chessBoard.get(6).type = 2;
     chessBoard.get(7).type = 1;
@@ -86,7 +88,6 @@ void draw() {
   showMoves();
 }
 
-int clicked = 0; //how many tiles are clicked at the end of the frame
 void clickPeice() {
   /*
     If tile pressed:
@@ -144,11 +145,11 @@ void showMoves() {
            if team red
            if y = tile.y - 1
            true
-           
+
            wowow
            sudo
            so for the starting position for pawns, you want to make a new boolean called awoken = false.
-           
+
            */
           if (chessBoard.get(i).x == chessBoard.get(moveT1).x) {
             if (chessBoard.get(moveT1).team == 1) {
@@ -262,9 +263,7 @@ void showMoves() {
               }
             }
           }
-          if (chessBoard.get(moveT1).type == 3) {
-            break;
-          }
+          break;
         case 5: //king
           if (chessBoard.get(i).team == chessBoard.get(moveT1).team) {
             break;
@@ -325,7 +324,6 @@ boolean checkLegalMove(int tile1, int tile2) {
   return false;
 }
 
-boolean mouseHeld = false;
 boolean bMousePressed() {
   //b for better
   //is true for one frame when mouse is pressed

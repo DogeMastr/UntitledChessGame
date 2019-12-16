@@ -34,6 +34,17 @@ float spacing;
 boolean mouseHeld = false;
 
 boolean turn; //whose turn is it? true = white/green
+boolean finished; //if the game has finished
+boolean menuOpen; //if a menu is open
+
+boolean blockingN = false; //blocking booleans for not
+boolean blockingS = false; //highlighting tiles that should be blocked
+boolean blockingE = false;
+boolean blockingW = false;
+boolean blockingNW = false;
+boolean blockingNE = false;
+boolean blockingSE = false;
+boolean blockingSW = false;
 
 public void setup() {
   
@@ -52,6 +63,8 @@ public void setup() {
   initBoard();
 
   turn = true;
+  finished = false;
+  menuOpen = false;
 }
 
 public void initBoard() {
@@ -79,7 +92,7 @@ public void initBoard() {
     }
 
     chessBoard.get(0).type = 1;
-    chessBoard.get(1).type = 0;
+    chessBoard.get(1).type = 2;
     chessBoard.get(2).type = 3;
     chessBoard.get(3).type = 4;
     chessBoard.get(4).type = 5;
@@ -111,6 +124,10 @@ public void draw() {
   clickPeice();
   showMoves();
   checkAndPromotion();
+
+  if(finished){
+    victoryMenu(moveT2);
+  }
 }
 
 public void clickPeice() {
@@ -154,14 +171,6 @@ public void clickPeice() {
   }
 }
 
-boolean blockingN = false;
-boolean blockingS = false;
-boolean blockingE = false;
-boolean blockingW = false;
-boolean blockingNW = false;
-boolean blockingNE = false;
-boolean blockingSW = false;
-boolean blockingSE = false;
 public void showMoves() {
   //this shows your posible moves by turning the tile a shade of blue
   if (moveT1 != -1 && chessBoard.get(moveT1).selected) {
@@ -470,6 +479,11 @@ public void showMoves() {
 public void movePeice() {
   //check of they are on different teams
   if (checkLegalMove(moveT1, moveT2)) {
+    //checks to see if it was a king and winning the game
+    if(chessBoard.get(moveT2).type == 5){
+      //the king was just taken
+      finished = true;
+    }
     //The peice is moving from one space to another
     chessBoard.get(moveT2).type = chessBoard.get(moveT1).type;
     chessBoard.get(moveT1).type = -1;
@@ -484,7 +498,6 @@ public void movePeice() {
   chessBoard.get(moveT2).selected = false;
 }
 
-boolean menuOpen = false;
 public void checkAndPromotion(){
   for(int i = 0; i < chessBoard.size() - 1; i++){
     if(i < 8 || i > 55){
@@ -496,7 +509,6 @@ public void checkAndPromotion(){
         rect(0,height/3,width,height/3);
         if(mouseX < width/4){
           fill(125);
-          println(mouseHeld);
           rect(0,height/3,width/4,height/3);
           if(bMousePressed()){
             chessBoard.get(i).type = 1;
@@ -504,7 +516,6 @@ public void checkAndPromotion(){
           }
         } else if(mouseX < width/2){
           fill(125);
-          println(2);
           rect(width/4,height/3,width/4,height/3);
           if(bMousePressed()){
             chessBoard.get(i).type = 2;
@@ -513,20 +524,28 @@ public void checkAndPromotion(){
         } else if(mouseX > width - width/4){
           fill(125);
           rect((width/4)*3,height/3,width/4,height/3);
-          println(4);
           if(bMousePressed()){
             chessBoard.get(i).type = 4;
             menuOpen = false;
           }
         } else if(mouseX > width/2){
           fill(125);
-          println(3);
           rect(width/2,height/3,width/4,height/3);
           if(bMousePressed()){
-            chessBoard.get(i).type = 4;
+            chessBoard.get(i).type = 3;
             menuOpen = false;
           }
         }
+        //replace with images
+        if(chessBoard.get(i).team == 0){
+          fill(255,0,0);
+        } else {
+          fill(0,255,0);
+        }
+        text("1",width/8,height/2);
+        text("2",width/2 - width/8,height/2);
+        text("3",width/2 + width/8,height/2);
+        text("4",width - width/8,height/2);
       }
     }
   }
@@ -555,13 +574,34 @@ public boolean bMousePressed() {
   //is true for one frame when mouse is pressed
   if (mousePressed & mouseHeld == false) {
     mouseHeld = true;
-    println("Clicked!");
     return true;
   }
   if (!mousePressed) {
     mouseHeld = false;
   }
   return false;
+}
+
+public void victoryMenu(int team){
+  //draws a victory menu depending on who wins
+    //team is 0 if red won
+    //team is 1 ig green won
+  background(125);
+  menuOpen = true;
+  textAlign(CENTER,CENTER);
+  textSize(spacing/2);
+  fill(0);
+  text("Victory!",width/2,height/8);
+  if(team == 0){
+    text("The Green team won the game!",width/2,height/4);
+  } else {
+    text("The Red team won the game!",width/2,height/4);
+  }
+  text("Click anywhere to reset",width/2,height/2);
+
+  if(bMousePressed()){
+    setup();
+  }
 }
 class Tile {
   float x;

@@ -1,12 +1,12 @@
 //basic chess no fancy shit ok cool
 /*
  SHIT IM DOING:
-  Making bishop highlight the correct tiles
+  Pawn promotion
 
  SHIT LEFT TO DO:
   win condition
   menu and gameover screens
-  Pawn transformation thing
+  check
  */
 ArrayList<Tile> chessBoard;
 
@@ -63,7 +63,7 @@ void initBoard() {
     }
 
     chessBoard.get(0).type = 1;
-    chessBoard.get(1).type = 2;
+    chessBoard.get(1).type = 0;
     chessBoard.get(2).type = 3;
     chessBoard.get(3).type = 4;
     chessBoard.get(4).type = 5;
@@ -94,6 +94,7 @@ void draw() {
   }
   clickPeice();
   showMoves();
+  checkAndPromotion();
 }
 
 void clickPeice() {
@@ -137,20 +138,14 @@ void clickPeice() {
   }
 }
 
-/*
-  THE FOR LOOP NEEDS REDESIGNING:
-    CHECK FROM MOVET1 AND NOT FROM 0
-    IN BOTH DIRECTIONS
-
-    to check blocking peices
-    - if it reaches a tile of the same peice
-    - after it reaches a tile of the other team
-
-*/
 boolean blockingN = false;
 boolean blockingS = false;
 boolean blockingE = false;
 boolean blockingW = false;
+boolean blockingNW = false;
+boolean blockingNE = false;
+boolean blockingSW = false;
+boolean blockingSE = false;
 void showMoves() {
   //this shows your posible moves by turning the tile a shade of blue
   if (moveT1 != -1 && chessBoard.get(moveT1).selected) {
@@ -325,18 +320,37 @@ void showMoves() {
           	for (int j = 0; j < 8; j++) {
           		if (chessBoard.get(i).y == chessBoard.get(moveT1).y + j*chessBoard.get(0).tWidth) {
           			if (chessBoard.get(i).x == chessBoard.get(moveT1).x + j*chessBoard.get(0).tWidth) {
-          				chessBoard.get(i).highlighted = true;
+
+                  if(chessBoard.get(moveT1).team == chessBoard.get(i).team){
+                    blockingSE = true;
+                  }
+                  if(chessBoard.get(i).team == -1){
+                    if(!blockingSE){
+                      chessBoard.get(i).highlighted = true;
+                    }
+                  } else if(chessBoard.get(i).team != chessBoard.get(moveT1).team){
+                    if(!blockingSE){
+                      chessBoard.get(i).highlighted = true;
+                      blockingSE = true;
+                    }
+                  }
+
+
           			}
           			if (chessBoard.get(i).x == chessBoard.get(moveT1).x - j*chessBoard.get(0).tWidth) {
-          				chessBoard.get(i).highlighted = true;
-          			}
-          		}
-          		if (chessBoard.get(i).y == chessBoard.get(moveT1).y - j*chessBoard.get(0).tWidth) {
-          			if (chessBoard.get(i).x == chessBoard.get(moveT1).x + j*chessBoard.get(0).tWidth) {
-          				chessBoard.get(i).highlighted = true;
-          			}
-          			if (chessBoard.get(i).x == chessBoard.get(moveT1).x - j*chessBoard.get(0).tWidth) {
-          				chessBoard.get(i).highlighted = true;
+                  if(chessBoard.get(moveT1).team == chessBoard.get(i).team){
+                    blockingSW = true;
+                  }
+                  if(chessBoard.get(i).team == -1){
+                    if(!blockingSW){
+                      chessBoard.get(i).highlighted = true;
+                    }
+                  } else if(chessBoard.get(i).team != chessBoard.get(moveT1).team){
+                    if(!blockingSW){
+                      chessBoard.get(i).highlighted = true;
+                      blockingSW = true;
+                    }
+                  }
           			}
           		}
           	}
@@ -385,21 +399,36 @@ void showMoves() {
              check for x = piece.x & y = i*height
              */
             for (int j = 0; j < 8; j++) {
-              if (chessBoard.get(i).y == chessBoard.get(moveT1).y + j*chessBoard.get(0).tWidth) {
-                if (chessBoard.get(i).x == chessBoard.get(moveT1).x + j*chessBoard.get(0).tWidth) {
-                  chessBoard.get(i).highlighted = true;
-                }
-                if (chessBoard.get(i).x == chessBoard.get(moveT1).x - j*chessBoard.get(0).tWidth) {
-                  chessBoard.get(i).highlighted = true;
-                }
-              }
-
               if (chessBoard.get(i).y == chessBoard.get(moveT1).y - j*chessBoard.get(0).tWidth) {
                 if (chessBoard.get(i).x == chessBoard.get(moveT1).x + j*chessBoard.get(0).tWidth) {
-                  chessBoard.get(i).highlighted = true;
+                  if(chessBoard.get(moveT1).team == chessBoard.get(i).team){
+                    blockingNE = true;
+                  }
+                  if(chessBoard.get(i).team == -1){
+                    if(!blockingNE){
+                      chessBoard.get(i).highlighted = true;
+                    }
+                  } else if(chessBoard.get(i).team != chessBoard.get(moveT1).team){
+                    if(!blockingNE){
+                      chessBoard.get(i).highlighted = true;
+                      blockingNE = true;
+                    }
+                  }
                 }
                 if (chessBoard.get(i).x == chessBoard.get(moveT1).x - j*chessBoard.get(0).tWidth) {
-                  chessBoard.get(i).highlighted = true;
+                  if(chessBoard.get(moveT1).team == chessBoard.get(i).team){
+                    blockingNW = true;
+                  }
+                  if(chessBoard.get(i).team == -1){
+                    if(!blockingNW){
+                      chessBoard.get(i).highlighted = true;
+                    }
+                  } else if(chessBoard.get(i).team != chessBoard.get(moveT1).team){
+                    if(!blockingNW){
+                      chessBoard.get(i).highlighted = true;
+                      blockingNW = true;
+                    }
+                  }
                 }
               }
             }
@@ -415,6 +444,10 @@ void showMoves() {
     blockingS = false;
     blockingE = false;
     blockingW = false;
+    blockingNW = false;
+    blockingNE = false;
+    blockingSW = false;
+    blockingSE = false;
   }
 }
 
@@ -433,6 +466,54 @@ void movePeice() {
   //no longer clicked
   chessBoard.get(moveT1).selected = false;
   chessBoard.get(moveT2).selected = false;
+}
+
+boolean menuOpen = false;
+void checkAndPromotion(){
+  for(int i = 0; i < chessBoard.size() - 1; i++){
+    if(i < 8 || i > 55){
+      if(chessBoard.get(i).type == 0){ //check if the pawn is in the top or bottom 8 spaces
+        //dissable use of the chess board
+        menuOpen = true;
+        //promotion menu
+        fill(0);
+        rect(0,height/3,width,height/3);
+        if(mouseX < width/4){
+          fill(125);
+          println(1);
+          rect(0,height/3,width/4,height/3);
+          if(bMousePressed()){
+            chessBoard.get(i).type = 1;
+            menuOpen = false;
+          }
+        } else if(mouseX < width/2){
+          fill(125);
+          println(2);
+          rect(width/4,height/3,width/4,height/3);
+          if(bMousePressed()){
+            chessBoard.get(i).type = 2;
+            menuOpen = false;
+          }
+        } else if(mouseX > width - width/4){
+          fill(125);
+          rect((width/4)*3,height/3,width/4,height/3);
+          println(4);
+          if(bMousePressed()){
+            chessBoard.get(i).type = 4;
+            menuOpen = false;
+          }
+        } else if(mouseX > width/2){
+          fill(125);
+          println(3);
+          rect(width/2,height/3,width/4,height/3);
+          if(bMousePressed()){
+            chessBoard.get(i).type = 3;
+            menuOpen = false;
+          }
+        }
+      }
+    }
+  }
 }
 
 boolean checkLegalMove(int tile1, int tile2) {
@@ -458,6 +539,7 @@ boolean bMousePressed() {
   //is true for one frame when mouse is pressed
   if (mousePressed & mouseHeld == false) {
     mouseHeld = true;
+    println("Clicked!");
     return true;
   }
   if (!mousePressed) {

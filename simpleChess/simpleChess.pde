@@ -1,13 +1,14 @@
 //basic chess no fancy shit ok cool
 /*
  SHIT IM DOING:
-  Pawn promotion
+ Images
 
  SHIT LEFT TO DO:
-  win condition
-  menu and gameover screens
   check
  */
+
+ImageDB imageDB;
+
 ArrayList<Tile> chessBoard;
 
 int moveT1 = -1; //the number of the tiles to be swapped
@@ -41,6 +42,8 @@ void setup() {
   rectMode(CORNER);
   textAlign(LEFT, TOP);
   textSize(spacing);
+
+  imageDB = new ImageDB();
 
   chessBoard = new ArrayList<Tile>();
 

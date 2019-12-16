@@ -17,13 +17,14 @@ public class simpleChess extends PApplet {
 //basic chess no fancy shit ok cool
 /*
  SHIT IM DOING:
-  Pawn promotion
+ Images
 
  SHIT LEFT TO DO:
-  win condition
-  menu and gameover screens
   check
  */
+
+ImageDB imageDB;
+
 ArrayList<Tile> chessBoard;
 
 int moveT1 = -1; //the number of the tiles to be swapped
@@ -57,6 +58,8 @@ public void setup() {
   rectMode(CORNER);
   textAlign(LEFT, TOP);
   textSize(spacing);
+
+  imageDB = new ImageDB();
 
   chessBoard = new ArrayList<Tile>();
 
@@ -603,6 +606,32 @@ public void victoryMenu(int team){
     setup();
   }
 }
+class ImageDB {
+	//loads all the images at the start
+	ArrayList<PImage> lightList;
+
+	ArrayList<PImage> darkList;
+
+	/*
+		LEMME EXPLAIN THE NAME
+		p13
+
+		p - peice
+		1 - team
+		3 - type
+	*/
+
+	ImageDB(){
+		lightList = new ArrayList<PImage>();
+		darkList = new ArrayList<PImage>();
+
+		for(int i = 0; i < 6; i++){
+			PImage temp = loadImage("data/0"+i+".png");
+			temp.resize((int)spacing,(int)spacing);
+			lightList.add(temp);
+		}
+	}
+}
 class Tile {
   float x;
   float y;
@@ -665,7 +694,7 @@ class Tile {
     }
 
     if (type != -1) {
-      text(type, x, y);
+      image(imageDB.lightList.get(type), x, y);
     }
   }
 

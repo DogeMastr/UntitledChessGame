@@ -60,7 +60,7 @@ class Tile {
     }
 
     if (type != -1) {
-      text(type, x, y);
+      image(imageDB.lightList.get(type), x, y);
     }
   }
 

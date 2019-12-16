@@ -33,14 +33,14 @@ class Tile {
   void display() {
     //if colour is true its a white space
     if (colour) {
-      fill(255);
+      fill(191);
       if (mouseOver() || selected) {
-        fill(191);
+        fill(128);
       }
     } else {
-      fill(0);
+      fill(63);
       if (mouseOver() || selected) {
-        fill(63);
+        fill(126);
       }
     }
 
@@ -54,13 +54,13 @@ class Tile {
     rect(x, y, tWidth, tWidth);
 
     if (team == 1) {
-      fill(0, 255, 0);
+      if (type != -1) {
+        image(imageDB.darkList.get(type), x, y);
+      }
     } else {
-      fill(255, 0, 0);
-    }
-
-    if (type != -1) {
-      image(imageDB.lightList.get(type), x, y);
+      if (type != -1) {
+        image(imageDB.lightList.get(type), x, y);
+      }
     }
   }
 

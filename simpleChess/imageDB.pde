@@ -21,6 +21,9 @@ class ImageDB {
 			PImage temp = loadImage("data/0"+i+".png");
 			temp.resize((int)spacing,(int)spacing);
 			lightList.add(temp);
+			temp = loadImage("data/1"+i+".png");
+			temp.resize((int)spacing,(int)spacing);
+			darkList.add(temp);
 		}
 	}
 }

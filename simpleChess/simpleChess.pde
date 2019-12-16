@@ -42,7 +42,7 @@ void setup() {
   rectMode(CORNER);
   textAlign(LEFT, TOP);
   textSize(spacing);
-
+  strokeWeight(0);
   imageDB = new ImageDB();
 
   chessBoard = new ArrayList<Tile>();
@@ -101,9 +101,9 @@ void initBoard() {
 void draw() {
   background(67, 70, 82);
   if(turn){
-    background(255,0,0);
+    background(46,146,255);
   } else {
-    background(0,255,0);
+    background(4,74,0);
   }
   for (int i = 0; i < chessBoard.size(); i++) {
     chessBoard.get(i).run();
@@ -523,16 +523,19 @@ void checkAndPromotion(){
             menuOpen = false;
           }
         }
-        //replace with images
+        imageMode(CENTER);
         if(chessBoard.get(i).team == 0){
-          fill(255,0,0);
+          image(imageDB.lightList.get(1),width/8,height/2);
+          image(imageDB.lightList.get(2),width/2 - width/8,height/2);
+          image(imageDB.lightList.get(3),width/2 + width/8,height/2);
+          image(imageDB.lightList.get(4),width - width/8,height/2);
         } else {
-          fill(0,255,0);
+          image(imageDB.darkList.get(1),width/8,height/2);
+          image(imageDB.darkList.get(2),width/2 - width/8,height/2);
+          image(imageDB.darkList.get(3),width/2 + width/8,height/2);
+          image(imageDB.darkList.get(4),width - width/8,height/2);
         }
-        text("1",width/8,height/2);
-        text("2",width/2 - width/8,height/2);
-        text("3",width/2 + width/8,height/2);
-        text("4",width - width/8,height/2);
+        imageMode(CORNER);
       }
     }
   }

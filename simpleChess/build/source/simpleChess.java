@@ -58,7 +58,7 @@ public void setup() {
   rectMode(CORNER);
   textAlign(LEFT, TOP);
   textSize(spacing);
-
+  strokeWeight(0);
   imageDB = new ImageDB();
 
   chessBoard = new ArrayList<Tile>();
@@ -117,9 +117,9 @@ public void initBoard() {
 public void draw() {
   background(67, 70, 82);
   if(turn){
-    background(255,0,0);
+    background(46,146,255);
   } else {
-    background(0,255,0);
+    background(4,74,0);
   }
   for (int i = 0; i < chessBoard.size(); i++) {
     chessBoard.get(i).run();
@@ -539,16 +539,19 @@ public void checkAndPromotion(){
             menuOpen = false;
           }
         }
-        //replace with images
+        imageMode(CENTER);
         if(chessBoard.get(i).team == 0){
-          fill(255,0,0);
+          image(imageDB.lightList.get(1),width/8,height/2);
+          image(imageDB.lightList.get(2),width/2 - width/8,height/2);
+          image(imageDB.lightList.get(3),width/2 + width/8,height/2);
+          image(imageDB.lightList.get(4),width - width/8,height/2);
         } else {
-          fill(0,255,0);
+          image(imageDB.darkList.get(1),width/8,height/2);
+          image(imageDB.darkList.get(2),width/2 - width/8,height/2);
+          image(imageDB.darkList.get(3),width/2 + width/8,height/2);
+          image(imageDB.darkList.get(4),width - width/8,height/2);
         }
-        text("1",width/8,height/2);
-        text("2",width/2 - width/8,height/2);
-        text("3",width/2 + width/8,height/2);
-        text("4",width - width/8,height/2);
+        imageMode(CORNER);
       }
     }
   }
@@ -629,6 +632,9 @@ class ImageDB {
 			PImage temp = loadImage("data/0"+i+".png");
 			temp.resize((int)spacing,(int)spacing);
 			lightList.add(temp);
+			temp = loadImage("data/1"+i+".png");
+			temp.resize((int)spacing,(int)spacing);
+			darkList.add(temp);
 		}
 	}
 }
@@ -667,14 +673,14 @@ class Tile {
   public void display() {
     //if colour is true its a white space
     if (colour) {
-      fill(255);
+      fill(191);
       if (mouseOver() || selected) {
-        fill(191);
+        fill(128);
       }
     } else {
-      fill(0);
+      fill(63);
       if (mouseOver() || selected) {
-        fill(63);
+        fill(126);
       }
     }
 
@@ -688,13 +694,13 @@ class Tile {
     rect(x, y, tWidth, tWidth);
 
     if (team == 1) {
-      fill(0, 255, 0);
+      if (type != -1) {
+        image(imageDB.darkList.get(type), x, y);
+      }
     } else {
-      fill(255, 0, 0);
-    }
-
-    if (type != -1) {
-      image(imageDB.lightList.get(type), x, y);
+      if (type != -1) {
+        image(imageDB.lightList.get(type), x, y);
+      }
     }
   }
 

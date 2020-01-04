@@ -65,7 +65,7 @@ class Tile {
   }
 
   boolean mouseOver() {
-    if(!menuOpen){
+    if (!menuOpen) {
       if (mouseX > x && mouseX < x + tWidth) {
         if (mouseY > y && mouseY < y + tWidth) {
           return true;

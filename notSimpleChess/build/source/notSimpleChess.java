@@ -12,9 +12,9 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class simpleChess extends PApplet {
+public class notSimpleChess extends PApplet {
 
-//basic chess no fancy shit ok cool
+//fuck shit
 /*
  SHIT IM DOING:
 
@@ -725,7 +725,7 @@ class Tile {
 }
   public void settings() {  size(720, 1080); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "simpleChess" };
+    String[] appletArgs = new String[] { "notSimpleChess" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

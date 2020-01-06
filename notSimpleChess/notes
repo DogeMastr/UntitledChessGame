@@ -1,0 +1,43 @@
+Show moves is wrong
+
+needs to check from the selected tile not the first
+
+split different for loops depending on what peice it is
+
+Current:
+	checking from 0
+		good for pawns knights and kings
+2:
+	checking from selected
+		should be good for bishop rook and queen
+
+this would allow to check the rook & bishop if there is a tile blocking
+
+new boolean blocking = false
+
+if i = same team : dont highlight and blocking true
+if i = different team: highlight and blocking true
+
+if i = team -1: blocking = false
+
+if blocking dont highlight
+
+
+
+second for loop:
+from selected down
+
+rook
+if same team:
+	blocked true
+
+if other team
+	highlight
+	blocked true
+
+if blank
+	if not blocked
+		highlight
+
+bishop
+fuck

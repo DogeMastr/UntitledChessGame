@@ -1,20 +1,4 @@
-import processing.core.*; 
-import processing.data.*; 
-import processing.event.*; 
-import processing.opengl.*; 
-
-import java.util.HashMap; 
-import java.util.ArrayList; 
-import java.io.File; 
-import java.io.BufferedReader; 
-import java.io.PrintWriter; 
-import java.io.InputStream; 
-import java.io.OutputStream; 
-import java.io.IOException; 
-
-public class simpleChess extends PApplet {
-
-//basic chess no fancy shit ok cool
+//fuck shit
 /*
  SHIT IM DOING:
 
@@ -49,8 +33,8 @@ boolean blockingNE = false;
 boolean blockingSE = false;
 boolean blockingSW = false;
 
-public void setup() {
-   //remember when making android builds to make it fullscreen
+void setup() {
+  size(720, 1080); //remember when making android builds to make it fullscreen
   //fullScreen();
   if (width <= height) {
     spacing = width/10; //landscape or square
@@ -72,7 +56,7 @@ public void setup() {
   menuOpen = false;
 }
 
-public void initBoard() {
+void initBoard() {
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
       chessBoard.add(new Tile(j*spacing + spacing, i*spacing + spacing));
@@ -116,7 +100,7 @@ public void initBoard() {
   }
 }
 
-public void draw() {
+void draw() {
   background(67, 70, 82);
   if (turn) {
     background(46, 146, 255);
@@ -135,7 +119,7 @@ public void draw() {
   }
 }
 
-public void clickPeice() {
+void clickPeice() {
   /*
     If tile pressed:
    Check how many tiles are pressed
@@ -176,7 +160,7 @@ public void clickPeice() {
   }
 }
 
-public void showMoves() {
+void showMoves() {
   //this shows your posible moves by turning the tile a shade of blue
   if (moveT1 != -1 && chessBoard.get(moveT1).selected) {
     //first peice is selected
@@ -479,7 +463,7 @@ public void showMoves() {
   }
 }
 
-public void movePeice() {
+void movePeice() {
   //check of they are on different teams
   if (checkLegalMove(moveT1, moveT2)) {
     //checks to see if it was a king and winning the game
@@ -501,7 +485,7 @@ public void movePeice() {
   chessBoard.get(moveT2).selected = false;
 }
 
-public void checkAndPromotion() {
+void checkAndPromotion() {
   for (int i = 0; i < chessBoard.size() - 1; i++) {
     if (i < 8 || i > 55) {
       if (chessBoard.get(i).type == 0) { //check if the pawn is in the top or bottom 8 spaces
@@ -559,7 +543,7 @@ public void checkAndPromotion() {
   }
 }
 
-public boolean checkLegalMove(int tile1, int tile2) {
+boolean checkLegalMove(int tile1, int tile2) {
   if (chessBoard.get(tile1).team == chessBoard.get(tile2).team) {
     return false;
   }
@@ -577,7 +561,7 @@ public boolean checkLegalMove(int tile1, int tile2) {
   return false;
 }
 
-public boolean bMousePressed() {
+boolean bMousePressed() {
   //b for better
   //is true for one frame when mouse is pressed
   if (mousePressed & mouseHeld == false) {
@@ -590,7 +574,7 @@ public boolean bMousePressed() {
   return false;
 }
 
-public void victoryMenu(int team) {
+void victoryMenu(int team) {
   //draws a victory menu depending on who wins
   //team is 0 if red won
   //team is 1 ig green won
@@ -609,127 +593,5 @@ public void victoryMenu(int team) {
 
   if (bMousePressed()) {
     setup();
-  }
-}
-class ImageDB {
-  //loads all the images at the start
-  ArrayList<PImage> lightList;
-
-  ArrayList<PImage> darkList;
-
-  /*
-		LEMME EXPLAIN THE NAME
-   		p13
-   
-   		p - peice
-   		1 - team
-   		3 - type
-   	*/
-
-  ImageDB() {
-    lightList = new ArrayList<PImage>();
-    darkList = new ArrayList<PImage>();
-
-    for (int i = 0; i < 6; i++) {
-      PImage temp = loadImage("data/0"+i+".png");
-      temp.resize((int)spacing, (int)spacing);
-      lightList.add(temp);
-      temp = loadImage("data/1"+i+".png");
-      temp.resize((int)spacing, (int)spacing);
-      darkList.add(temp);
-    }
-  }
-}
-class Tile {
-  float x;
-  float y;
-  float tWidth;
-  int type;
-  int team;
-
-  boolean colour;
-  boolean selected;
-
-  boolean highlighted;
-
-  boolean awoken;
-  Tile(float x, float y) {
-    this.x = x;
-    this.y = y;
-
-    type = -1; //8 types of peice -1 for a blank space
-    tWidth = spacing;
-    selected = false;
-    awoken = false;
-  }
-
-  public void run() {
-    display();
-    select();
-
-    if (type == -1) {
-      team = -1;
-    }
-  }
-
-  public void display() {
-    //if colour is true its a white space
-    if (colour) {
-      fill(191);
-      if (mouseOver() || selected) {
-        fill(128);
-      }
-    } else {
-      fill(63);
-      if (mouseOver() || selected) {
-        fill(126);
-      }
-    }
-
-    if (highlighted) {
-      if (colour) {
-        fill(170, 170, 255);
-      } else {
-        fill(86, 86, 171);
-      }
-    }
-    rect(x, y, tWidth, tWidth);
-
-    if (team == 1) {
-      if (type != -1) {
-        image(imageDB.darkList.get(type), x, y);
-      }
-    } else {
-      if (type != -1) {
-        image(imageDB.lightList.get(type), x, y);
-      }
-    }
-  }
-
-  public boolean mouseOver() {
-    if (!menuOpen) {
-      if (mouseX > x && mouseX < x + tWidth) {
-        if (mouseY > y && mouseY < y + tWidth) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  public void select() {
-    if (mouseOver() && bMousePressed()) {
-      selected = !selected;
-    }
-  }
-}
-  public void settings() {  size(720, 1080); }
-  static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "simpleChess" };
-    if (passedArgs != null) {
-      PApplet.main(concat(appletArgs, passedArgs));
-    } else {
-      PApplet.main(appletArgs);
-    }
   }
 }

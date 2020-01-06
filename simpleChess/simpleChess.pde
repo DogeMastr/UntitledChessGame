@@ -34,12 +34,12 @@ boolean blockingSE = false;
 boolean blockingSW = false;
 
 void setup() {
-  size(800, 800);
+  size(720, 1080); //remember when making android builds to make it fullscreen
   //fullScreen();
   if (width <= height) {
-    spacing = width/10;
+    spacing = width/10; //landscape or square
   } else {
-    spacing = height/10;
+    spacing = height/10; //portrait
   }
   rectMode(CORNER);
   textAlign(LEFT, TOP);

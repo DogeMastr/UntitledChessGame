@@ -9,7 +9,7 @@
 
  */
 
-ImageDB imageDB;
+//ImageDB imageDB;
 
 ArrayList<Tile> chessBoard;
 
@@ -45,7 +45,7 @@ void setup() {
   textAlign(LEFT, TOP);
   textSize(spacing);
   strokeWeight(0);
-  imageDB = new ImageDB();
+//imageDB = new ImageDB();
 
   chessBoard = new ArrayList<Tile>();
 
@@ -527,16 +527,20 @@ void checkAndPromotion() {
         }
         imageMode(CENTER);
         if (chessBoard.get(i).team == 0) {
-          image(imageDB.lightList.get(1), width/8, height/2);
-          image(imageDB.lightList.get(2), width/2 - width/8, height/2);
-          image(imageDB.lightList.get(3), width/2 + width/8, height/2);
-          image(imageDB.lightList.get(4), width - width/8, height/2);
+          // image(imageDB.lightList.get(1), width/8, height/2);
+          // image(imageDB.lightList.get(2), width/2 - width/8, height/2);
+          // image(imageDB.lightList.get(3), width/2 + width/8, height/2);
+          // image(imageDB.lightList.get(4), width - width/8, height/2);
         } else {
-          image(imageDB.darkList.get(1), width/8, height/2);
-          image(imageDB.darkList.get(2), width/2 - width/8, height/2);
-          image(imageDB.darkList.get(3), width/2 + width/8, height/2);
-          image(imageDB.darkList.get(4), width - width/8, height/2);
+          // image(imageDB.darkList.get(1), width/8, height/2);
+          // image(imageDB.darkList.get(2), width/2 - width/8, height/2);
+          // image(imageDB.darkList.get(3), width/2 + width/8, height/2);
+          // image(imageDB.darkList.get(4), width - width/8, height/2);
         }
+        text("Rook",width/8, height/2);
+        text("Bishop",width/2 - width/8, height/2);
+        text("Knight",width/2 + width/8, height/2);
+        text("Queen",width - width/8, height/2);
         imageMode(CORNER);
       }
     }

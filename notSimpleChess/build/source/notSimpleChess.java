@@ -14,20 +14,25 @@ import java.io.IOException;
 
 public class notSimpleChess extends PApplet {
 
-//fuck shit
 /*
- SHIT IM DOING:
+  SHIT IM DOING:
+    GAMEMODES:
+    HIDDEN KING
+    RANDOM
+    SUICIDE
 
- SHIT LEFT TO DO:
+  SHIT LEFT TO DO:
    check
    Castleing
    Un pass the bagguette
 
- */
+*/
 
 ImageDB imageDB;
 
 ArrayList<Tile> chessBoard;
+
+boolean firstopen = true;
 
 int moveT1 = -1; //the number of the tiles to be swapped
 int moveT2 = -1;
@@ -65,14 +70,12 @@ public void setup() {
 
   chessBoard = new ArrayList<Tile>();
 
-  initBoard();
-
   turn = true;
   finished = false;
   menuOpen = false;
 }
 
-public void initBoard() {
+public void initBoard(int gamemode) {
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
       chessBoard.add(new Tile(j*spacing + spacing, i*spacing + spacing));
@@ -117,6 +120,14 @@ public void initBoard() {
 }
 
 public void draw() {
+  if(firstopen){
+    //aaaaaaaaaaaaaaaaaaaaaaaaa
+    menu();
+  }
+}
+
+public void playChess(){
+  rectMode(CORNER);
   background(67, 70, 82);
   if (turn) {
     background(46, 146, 255);
@@ -129,6 +140,7 @@ public void draw() {
   clickPeice();
   showMoves();
   checkAndPromotion();
+  menu();
 
   if (finished) {
     victoryMenu(moveT2);
@@ -138,15 +150,15 @@ public void draw() {
 public void clickPeice() {
   /*
     If tile pressed:
-   Check how many tiles are pressed
-   if 0:
-   Check if its a blank space
-   if so then stop
-   else
-   record moveT1
-   if 1:
-   record moveT2
-   movePeice();
+      Check how many tiles are pressed
+    if 0:
+      Check if its a blank space
+    if so then stop
+    else
+    record moveT1
+    if 1:
+    record moveT2
+    movePeice();
    */
 
   for (int i = 0; i < chessBoard.size(); i++) {
@@ -611,6 +623,33 @@ public void victoryMenu(int team) {
     setup();
   }
 }
+
+boolean gamemodeMenuOpen = false;
+public void menu(){
+  rectMode(CENTER);
+  textAlign(CENTER,CENTER);
+  fill(255);
+  rect(width/2,spacing*11,spacing*3,spacing);
+  fill(0);
+  text("MENU",width/2,spacing*11);
+
+  if(bMousePressed()){
+    if(mouseY > spacing*11 && mouseY < spacing*12){
+      if(mouseX < width/2 + spacing*1.5f && mouseX > width/2 - spacing*1.5f){
+        menuOpen = !menuOpen;
+        gamemodeMenuOpen = !gamemodeMenuOpen;
+      }
+    }
+  }
+
+  if(gamemodeMenuOpen){
+    background(0);
+    textSize(spacing);
+    fill(0);
+    text("Regular Chess",width/2,spacing);
+
+  }
+}
 class ImageDB {
   //loads all the images at the start
   ArrayList<PImage> lightList;
@@ -620,8 +659,8 @@ class ImageDB {
   /*
 		LEMME EXPLAIN THE NAME
    		p13
-   
-   		p - peice
+
+      p - peice
    		1 - team
    		3 - type
    	*/

@@ -1,17 +1,22 @@
-//fuck shit
 /*
- SHIT IM DOING:
+  SHIT IM DOING:
+    GAMEMODES:
+    HIDDEN KING
+    RANDOM
+    SUICIDE
 
- SHIT LEFT TO DO:
+  SHIT LEFT TO DO:
    check
    Castleing
    Un pass the bagguette
 
- */
+*/
 
 ImageDB imageDB;
 
 ArrayList<Tile> chessBoard;
+
+boolean firstopen = true;
 
 int moveT1 = -1; //the number of the tiles to be swapped
 int moveT2 = -1;
@@ -49,14 +54,12 @@ void setup() {
 
   chessBoard = new ArrayList<Tile>();
 
-  initBoard();
-
   turn = true;
   finished = false;
   menuOpen = false;
 }
 
-void initBoard() {
+void initBoard(int gamemode) {
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
       chessBoard.add(new Tile(j*spacing + spacing, i*spacing + spacing));
@@ -101,6 +104,14 @@ void initBoard() {
 }
 
 void draw() {
+  if(firstopen){
+    //aaaaaaaaaaaaaaaaaaaaaaaaa
+    menu();
+  }
+}
+
+void playChess(){
+  rectMode(CORNER);
   background(67, 70, 82);
   if (turn) {
     background(46, 146, 255);
@@ -113,6 +124,7 @@ void draw() {
   clickPeice();
   showMoves();
   checkAndPromotion();
+  menu();
 
   if (finished) {
     victoryMenu(moveT2);
@@ -122,15 +134,15 @@ void draw() {
 void clickPeice() {
   /*
     If tile pressed:
-   Check how many tiles are pressed
-   if 0:
-   Check if its a blank space
-   if so then stop
-   else
-   record moveT1
-   if 1:
-   record moveT2
-   movePeice();
+      Check how many tiles are pressed
+    if 0:
+      Check if its a blank space
+    if so then stop
+    else
+    record moveT1
+    if 1:
+    record moveT2
+    movePeice();
    */
 
   for (int i = 0; i < chessBoard.size(); i++) {
@@ -593,5 +605,32 @@ void victoryMenu(int team) {
 
   if (bMousePressed()) {
     setup();
+  }
+}
+
+boolean gamemodeMenuOpen = false;
+void menu(){
+  rectMode(CENTER);
+  textAlign(CENTER,CENTER);
+  fill(255);
+  rect(width/2,spacing*11,spacing*3,spacing);
+  fill(0);
+  text("MENU",width/2,spacing*11);
+
+  if(bMousePressed()){
+    if(mouseY > spacing*11 && mouseY < spacing*12){
+      if(mouseX < width/2 + spacing*1.5 && mouseX > width/2 - spacing*1.5){
+        menuOpen = !menuOpen;
+        gamemodeMenuOpen = !gamemodeMenuOpen;
+      }
+    }
+  }
+
+  if(gamemodeMenuOpen){
+    background(0);
+    textSize(spacing);
+    fill(0);
+    text("Regular Chess",width/2,spacing);
+
   }
 }

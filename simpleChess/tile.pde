@@ -55,11 +55,13 @@ class Tile {
 
     if (team == 1) {
       if (type != -1) {
-        image(imageDB.darkList.get(type), x, y);
+        fill(0);
+        text(type,x,y);
       }
     } else {
       if (type != -1) {
-        image(imageDB.lightList.get(type), x, y);
+        fill(255);
+        text(type,x,y);
       }
     }
   }

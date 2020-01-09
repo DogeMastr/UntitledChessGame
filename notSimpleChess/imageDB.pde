@@ -7,8 +7,8 @@ class ImageDB {
   /*
 		LEMME EXPLAIN THE NAME
    		p13
-   
-   		p - peice
+
+      p - peice
    		1 - team
    		3 - type
    	*/

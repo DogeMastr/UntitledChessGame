@@ -18,10 +18,11 @@ public class notSimpleChess extends PApplet {
   SHIT IM DOING:
     GAMEMODES:
     HIDDEN KING
-    RANDOM
-    SUICIDE
+    menus
 
   SHIT LEFT TO DO:
+   RANDOM
+   SUICIDE
    check
    Castleing
    Un pass the bagguette
@@ -54,6 +55,11 @@ boolean blockingNE = false;
 boolean blockingSE = false;
 boolean blockingSW = false;
 
+boolean previous = true;
+
+boolean lightKingHidden = false;
+boolean darkKingHidden = false;
+
 public void setup() {
    //remember when making android builds to make it fullscreen
   //fullScreen();
@@ -62,6 +68,7 @@ public void setup() {
   } else {
     spacing = height/10; //portrait
   }
+
   rectMode(CORNER);
   textAlign(LEFT, TOP);
   textSize(spacing);
@@ -70,70 +77,101 @@ public void setup() {
 
   chessBoard = new ArrayList<Tile>();
 
-  turn = true;
-  finished = false;
-  menuOpen = false;
-}
 
-public void initBoard(int gamemode) {
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
-      chessBoard.add(new Tile(j*spacing + spacing, i*spacing + spacing));
+      chessBoard.add(new Tile(j*spacing + spacing, i*spacing + spacing, previous));
+      if ((j+1)%8 != 0) {
+        previous = !previous;
+      }
     }
   }
 
-  boolean previous = true;
-  for (int i = 0; i < chessBoard.size(); i++) {
-    chessBoard.get(i).colour = previous;
-    if ((i+1)%8 != 0) {
-      previous = !previous;
+  turn = true;
+  finished = false;
+  menuOpen = false;
+
+  changeColour(0);
+  initBoard(0);
+
+}
+
+public void initBoard(int gamemode) {
+  for (int i = 0; i < chessBoard.size(); i++){
+    chessBoard.get(i).type = -1; //clears the board
+    switch(gamemode){
+      case 0:
+        if (i <= 15) {
+          chessBoard.get(i).team = 1;
+          chessBoard.get(i).type = 0;
+        } else if (i >= 48) {
+          chessBoard.get(i).team = 0;
+          chessBoard.get(i).type = 0;
+        } else if (i > 15) {
+          chessBoard.get(i).team = -1;
+        }
+
+        chessBoard.get(0).type = 1;
+        chessBoard.get(1).type = 2;
+        chessBoard.get(2).type = 3;
+        chessBoard.get(3).type = 4;
+        chessBoard.get(4).type = 5;
+        chessBoard.get(5).type = 3;
+        chessBoard.get(6).type = 2;
+        chessBoard.get(7).type = 1;
+
+        chessBoard.get(56).type = 1;
+        chessBoard.get(57).type = 2;
+        chessBoard.get(58).type = 3;
+        chessBoard.get(59).type = 4;
+        chessBoard.get(60).type = 5;
+        chessBoard.get(61).type = 3;
+        chessBoard.get(62).type = 2;
+        chessBoard.get(63).type = 1;
+        break;
+      case 1:
+        if (i <= 15) {
+          chessBoard.get(i).team = 1;
+          chessBoard.get(i).type = 0;
+        } else if (i >= 48) {
+          chessBoard.get(i).team = 0;
+          chessBoard.get(i).type = 0;
+        } else if (i > 15) {
+          chessBoard.get(i).team = -1;
+        }
+
+        chessBoard.get(0).type = 1;
+        chessBoard.get(1).type = 2;
+        chessBoard.get(2).type = 3;
+        chessBoard.get(3).type = 4;
+        chessBoard.get(4).type = 5;
+        chessBoard.get(5).type = 3;
+        chessBoard.get(6).type = 2;
+        chessBoard.get(7).type = 1;
+
+        chessBoard.get(56).type = 1;
+        chessBoard.get(57).type = 2;
+        chessBoard.get(58).type = 3;
+        chessBoard.get(59).type = 4;
+        chessBoard.get(60).type = 5;
+        chessBoard.get(61).type = 3;
+        chessBoard.get(62).type = 2;
+        chessBoard.get(63).type = 1;
+
+        break;
     }
-
-    if (i <= 15) {
-      chessBoard.get(i).team = 1;
-      chessBoard.get(i).type = 0;
-    } else if (i >= 48) {
-      chessBoard.get(i).team = 0;
-      chessBoard.get(i).type = 0;
-    } else if (i > 15) {
-      chessBoard.get(i).team = -1;
-    }
-
-    chessBoard.get(0).type = 1;
-    chessBoard.get(1).type = 2;
-    chessBoard.get(2).type = 3;
-    chessBoard.get(3).type = 4;
-    chessBoard.get(4).type = 5;
-    chessBoard.get(5).type = 3;
-    chessBoard.get(6).type = 2;
-    chessBoard.get(7).type = 1;
-
-    chessBoard.get(56).type = 1;
-    chessBoard.get(57).type = 2;
-    chessBoard.get(58).type = 3;
-    chessBoard.get(59).type = 4;
-    chessBoard.get(60).type = 5;
-    chessBoard.get(61).type = 3;
-    chessBoard.get(62).type = 2;
-    chessBoard.get(63).type = 1;
   }
 }
 
 public void draw() {
-  if(firstopen){
-    //aaaaaaaaaaaaaaaaaaaaaaaaa
-    menu();
-  }
+  playChess();
 }
 
 public void playChess(){
   rectMode(CORNER);
-  background(67, 70, 82);
-  if (turn) {
-    background(46, 146, 255);
-  } else {
-    background(4, 74, 0);
-  }
+
+  drawBackground();
+
   for (int i = 0; i < chessBoard.size(); i++) {
     chessBoard.get(i).run();
   }
@@ -514,6 +552,7 @@ public void movePeice() {
 }
 
 public void checkAndPromotion() {
+  //does not do check ***yet***
   for (int i = 0; i < chessBoard.size() - 1; i++) {
     if (i < 8 || i > 55) {
       if (chessBoard.get(i).type == 0) { //check if the pawn is in the top or bottom 8 spaces
@@ -555,15 +594,15 @@ public void checkAndPromotion() {
         }
         imageMode(CENTER);
         if (chessBoard.get(i).team == 0) {
-          image(imageDB.lightList.get(1), width/8, height/2);
-          image(imageDB.lightList.get(2), width/2 - width/8, height/2);
-          image(imageDB.lightList.get(3), width/2 + width/8, height/2);
-          image(imageDB.lightList.get(4), width - width/8, height/2);
+          image(imageDB.lightCurrent.get(1), width/8, height/2);
+          image(imageDB.lightCurrent.get(2), width/2 - width/8, height/2);
+          image(imageDB.lightCurrent.get(3), width/2 + width/8, height/2);
+          image(imageDB.lightCurrent.get(4), width - width/8, height/2);
         } else {
-          image(imageDB.darkList.get(1), width/8, height/2);
-          image(imageDB.darkList.get(2), width/2 - width/8, height/2);
-          image(imageDB.darkList.get(3), width/2 + width/8, height/2);
-          image(imageDB.darkList.get(4), width - width/8, height/2);
+          image(imageDB.darkCurrent.get(1), width/8, height/2);
+          image(imageDB.darkCurrent.get(2), width/2 - width/8, height/2);
+          image(imageDB.darkCurrent.get(3), width/2 + width/8, height/2);
+          image(imageDB.darkCurrent.get(4), width - width/8, height/2);
         }
         imageMode(CORNER);
       }
@@ -589,17 +628,55 @@ public boolean checkLegalMove(int tile1, int tile2) {
   return false;
 }
 
-public boolean bMousePressed() {
-  //b for better
-  //is true for one frame when mouse is pressed
-  if (mousePressed & mouseHeld == false) {
-    mouseHeld = true;
-    return true;
+public void changeSkin(int skin){
+  switch(skin){
+    case 0:
+      imageDB.lightCurrent = imageDB.lightDefault;
+      imageDB.darkCurrent = imageDB.darkDefault;
+      break;
+    case 1:
+      imageDB.lightCurrent = imageDB.lightAnimals;
+      imageDB.darkCurrent = imageDB.darkAnimals;
   }
-  if (!mousePressed) {
-    mouseHeld = false;
+}
+
+int lightColour;
+int darkColour;
+public void changeColour(int colour){
+  /*
+    Colour List:
+      0 - Blue/Green
+      1 - Pink/Orange
+      2 - Yellow/Blue
+      3 - Red/Purple
+  */
+  switch(colour){
+    case 0:
+      lightColour = color(50,160,255);
+      darkColour = color(50,200,75);
+      break;
+    case 1:
+      lightColour = color(255,30,140);
+      darkColour = color(255,92,40);
+      break;
+    case 2:
+      lightColour = color(255,200,25);
+      darkColour = color(100,70,255);
+      break;
+    case 3:
+      lightColour = color(255,50,40);
+      darkColour = color(210,30,255);
+      break;
   }
-  return false;
+
+}
+
+public void drawBackground(){
+  if(turn){
+    background(lightColour);
+  } else {
+    background(darkColour);
+  }
 }
 
 public void victoryMenu(int team) {
@@ -624,7 +701,10 @@ public void victoryMenu(int team) {
   }
 }
 
-boolean gamemodeMenuOpen = false;
+boolean gamemodeMenu = false;
+boolean generalMenu = false;
+boolean skinMenu = false;
+boolean backgroundMenu = false;
 public void menu(){
   rectMode(CENTER);
   textAlign(CENTER,CENTER);
@@ -633,28 +713,196 @@ public void menu(){
   fill(0);
   text("MENU",width/2,spacing*11);
 
-  if(bMousePressed()){
-    if(mouseY > spacing*11 && mouseY < spacing*12){
-      if(mouseX < width/2 + spacing*1.5f && mouseX > width/2 - spacing*1.5f){
-        menuOpen = !menuOpen;
-        gamemodeMenuOpen = !gamemodeMenuOpen;
+  if(mouseY > spacing*10.5f && mouseY < spacing*11.5f){
+    if(mouseX < width/2 + spacing*1.5f && mouseX > width/2 - spacing*1.5f){
+      if(menuMousePressed() && generalMenu == false){
+        generalMenu = true;
       }
     }
   }
 
-  if(gamemodeMenuOpen){
-    background(0);
-    textSize(spacing);
-    fill(0);
-    text("Regular Chess",width/2,spacing);
+  if(generalMenu){
+    mouseHeld = true; //dissables making your move on the board through the menu
 
+    background(0);
+    fill(125);
+    rectMode(CORNER);
+    if(mouseY > spacing*6){
+      rect(0,spacing*6,width,spacing*2);
+      if(menuMousePressed()){
+        generalMenu = false;
+      }
+    } else if(mouseY > spacing*4){
+      rect(0,spacing*4,width,spacing*2);
+      if(menuMousePressed()){
+        generalMenu = false;
+        backgroundMenu = true;
+      }
+    } else if(mouseY > spacing*2){
+      rect(0,spacing*2,width,spacing*2);
+      if(menuMousePressed()){
+        generalMenu = false;
+        skinMenu = true;
+      }
+    } else {
+      rect(0,0,width,spacing*2);
+      if(menuMousePressed()){
+        generalMenu = false;
+        gamemodeMenu = true;
+      }
+    }
+    textSize(spacing);
+    fill(255);
+    text("Change Gamemode",width/2,spacing);
+    text("Change Skins",width/2,spacing*3);
+    text("Change Colors",width/2,spacing*5);
+    text("Back",width/2,spacing*7);
   }
+  if(gamemodeMenu){
+    mouseHeld = true;
+    background(0);
+    fill(125);
+    rectMode(CORNER);
+    if(mouseY > spacing*4){
+      rect(0,spacing*4,width,spacing*2);
+      if(menuMousePressed()){
+        gamemodeMenu = false;
+        generalMenu = true;
+      }
+    } else if(mouseY > spacing*2){
+      rect(0,spacing*2,width,spacing*2);
+      if(menuMousePressed()){
+        gamemodeMenu = false;
+        initBoard(1);
+      }
+    } else {
+      rect(0,0,width,spacing*2);
+      if(menuMousePressed()){
+        gamemodeMenu = false;
+        initBoard(0);
+      }
+    }
+    textSize(spacing);
+    fill(255);
+    text("Regular Chess",width/2,spacing);
+    text("Hidden King",width/2,spacing*3);
+    text("Back",width/2,spacing*5);
+  }
+  if(skinMenu){
+    mouseHeld = true;
+
+    background(0);
+    fill(125);
+    rectMode(CORNER);
+    if(mouseY > spacing*4){
+      rect(0,spacing*4,width,spacing*2);
+      if(menuMousePressed()){
+        skinMenu = false;
+        generalMenu = true;
+      }
+    } else if(mouseY > spacing*2){
+      rect(0,spacing*2,width,spacing*2);
+      if(menuMousePressed()){
+        skinMenu = false;
+        changeSkin(1);
+      }
+    } else {
+      rect(0,0,width,spacing*2);
+      if(menuMousePressed()){
+        skinMenu = false;
+        changeSkin(0);
+      }
+    }
+    textSize(spacing);
+    fill(255);
+    text("Default",width/2,spacing);
+    text("Animals",width/2,spacing*3);
+    text("Back",width/2,spacing*5);
+  }
+  if(backgroundMenu){
+    mouseHeld = true;
+
+    background(0);
+    fill(125);
+    rectMode(CORNER);
+    if(mouseY > spacing*8){
+      rect(0,spacing*8,width,spacing*2);
+      if(menuMousePressed()){
+        backgroundMenu = false;
+        generalMenu = true;
+      }
+    } else if(mouseY > spacing*6){
+      rect(0,spacing*6,width,spacing*2);
+      if(menuMousePressed()){
+        backgroundMenu = false;
+        changeColour(3);
+      }
+    } else if(mouseY > spacing*4){
+      rect(0,spacing*4,width,spacing*2);
+      if(menuMousePressed()){
+        backgroundMenu = false;
+        changeColour(2);
+      }
+    } else if(mouseY > spacing*2){
+      rect(0,spacing*2,width,spacing*2);
+      if(menuMousePressed()){
+        backgroundMenu = false;
+        changeColour(1);
+      }
+    } else {
+      rect(0,0,width,spacing*2);
+      if(menuMousePressed()){
+        backgroundMenu = false;
+        changeColour(0);
+      }
+    }
+    textSize(spacing);
+    fill(255);
+    text("Blue/Green",width/2,spacing);
+    text("Pink/Orange",width/2,spacing*3);
+    text("Yellow/Blue",width/2,spacing*5);
+    text("Red/Purple",width/2,spacing*7);
+    text("Back",width/2,spacing*9);
+  }
+}
+
+public boolean bMousePressed() {
+  //b for better
+  //is true for one frame when mouse is pressed
+  if (mousePressed & mouseHeld == false) {
+    mouseHeld = true;
+    println("mouse Pressed!");
+    return true;
+  }
+  if (!mousePressed) {
+    mouseHeld = false;
+  }
+  return false;
+}
+
+boolean menuHeld = false;
+public boolean menuMousePressed(){
+  if (mousePressed & menuHeld == false) {
+    menuHeld = true;
+    println("menu Pressed!");
+    return true;
+  }
+  if (!mousePressed) {
+    menuHeld = false;
+  }
+  return false;
+
 }
 class ImageDB {
   //loads all the images at the start
-  ArrayList<PImage> lightList;
+  ArrayList<PImage> lightCurrent;
+  ArrayList<PImage> darkCurrent;
 
-  ArrayList<PImage> darkList;
+  ArrayList<PImage> lightDefault;
+  ArrayList<PImage> darkDefault;
+
+  ArrayList<PImage> lightAnimals;
+  ArrayList<PImage> darkAnimals;
 
   /*
 		LEMME EXPLAIN THE NAME
@@ -666,17 +914,33 @@ class ImageDB {
    	*/
 
   ImageDB() {
-    lightList = new ArrayList<PImage>();
-    darkList = new ArrayList<PImage>();
+    lightCurrent = new ArrayList<PImage>();
+    darkCurrent = new ArrayList<PImage>();
+
+    lightDefault = new ArrayList<PImage>();
+    darkDefault = new ArrayList<PImage>();
+
+    lightAnimals = new ArrayList<PImage>();
+    darkAnimals = new ArrayList<PImage>();
 
     for (int i = 0; i < 6; i++) {
-      PImage temp = loadImage("data/0"+i+".png");
+      PImage temp = loadImage("data/skins/default/0"+i+".png");
       temp.resize((int)spacing, (int)spacing);
-      lightList.add(temp);
-      temp = loadImage("data/1"+i+".png");
+      lightDefault.add(temp);
+      temp = loadImage("data/skins/default/1"+i+".png");
       temp.resize((int)spacing, (int)spacing);
-      darkList.add(temp);
+      darkDefault.add(temp);
+
+      temp = loadImage("data/skins/animals/0"+i+".png");
+      temp.resize((int)spacing, (int)spacing);
+      lightAnimals.add(temp);
+      temp = loadImage("data/skins/animals/1"+i+".png");
+      temp.resize((int)spacing, (int)spacing);
+      darkAnimals.add(temp);
     }
+
+    lightCurrent = lightAnimals;
+    darkCurrent = darkAnimals;
   }
 }
 class Tile {
@@ -684,7 +948,8 @@ class Tile {
   float y;
   float tWidth;
   int type;
-  int team;
+  int team; // 0 or 1, -1 for blank space
+  boolean hiddenKing; //if the piece is a hidden king 
 
   boolean colour;
   boolean selected;
@@ -692,10 +957,11 @@ class Tile {
   boolean highlighted;
 
   boolean awoken;
-  Tile(float x, float y) {
+  Tile(float x, float y, boolean tiletype) {
     this.x = x;
     this.y = y;
 
+    colour = tiletype;
     type = -1; //8 types of peice -1 for a blank space
     tWidth = spacing;
     selected = false;
@@ -736,11 +1002,11 @@ class Tile {
 
     if (team == 1) {
       if (type != -1) {
-        image(imageDB.darkList.get(type), x, y);
+        image(imageDB.darkCurrent.get(type), x, y);
       }
     } else {
       if (type != -1) {
-        image(imageDB.lightList.get(type), x, y);
+        image(imageDB.lightCurrent.get(type), x, y);
       }
     }
   }

@@ -3,7 +3,8 @@ class Tile {
   float y;
   float tWidth;
   int type;
-  int team;
+  int team; // 0 or 1, -1 for blank space
+  boolean hiddenKing; //if the piece is a hidden king 
 
   boolean colour;
   boolean selected;
@@ -11,10 +12,11 @@ class Tile {
   boolean highlighted;
 
   boolean awoken;
-  Tile(float x, float y) {
+  Tile(float x, float y, boolean tiletype) {
     this.x = x;
     this.y = y;
 
+    colour = tiletype;
     type = -1; //8 types of peice -1 for a blank space
     tWidth = spacing;
     selected = false;
@@ -55,11 +57,11 @@ class Tile {
 
     if (team == 1) {
       if (type != -1) {
-        image(imageDB.darkList.get(type), x, y);
+        image(imageDB.darkCurrent.get(type), x, y);
       }
     } else {
       if (type != -1) {
-        image(imageDB.lightList.get(type), x, y);
+        image(imageDB.lightCurrent.get(type), x, y);
       }
     }
   }

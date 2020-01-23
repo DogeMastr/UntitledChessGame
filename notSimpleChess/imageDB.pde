@@ -1,8 +1,13 @@
 class ImageDB {
   //loads all the images at the start
-  ArrayList<PImage> lightList;
+  ArrayList<PImage> lightCurrent;
+  ArrayList<PImage> darkCurrent;
 
-  ArrayList<PImage> darkList;
+  ArrayList<PImage> lightDefault;
+  ArrayList<PImage> darkDefault;
+
+  ArrayList<PImage> lightAnimals;
+  ArrayList<PImage> darkAnimals;
 
   /*
 		LEMME EXPLAIN THE NAME
@@ -14,16 +19,32 @@ class ImageDB {
    	*/
 
   ImageDB() {
-    lightList = new ArrayList<PImage>();
-    darkList = new ArrayList<PImage>();
+    lightCurrent = new ArrayList<PImage>();
+    darkCurrent = new ArrayList<PImage>();
+
+    lightDefault = new ArrayList<PImage>();
+    darkDefault = new ArrayList<PImage>();
+
+    lightAnimals = new ArrayList<PImage>();
+    darkAnimals = new ArrayList<PImage>();
 
     for (int i = 0; i < 6; i++) {
-      PImage temp = loadImage("data/0"+i+".png");
+      PImage temp = loadImage("data/skins/default/0"+i+".png");
       temp.resize((int)spacing, (int)spacing);
-      lightList.add(temp);
-      temp = loadImage("data/1"+i+".png");
+      lightDefault.add(temp);
+      temp = loadImage("data/skins/default/1"+i+".png");
       temp.resize((int)spacing, (int)spacing);
-      darkList.add(temp);
+      darkDefault.add(temp);
+
+      temp = loadImage("data/skins/animals/0"+i+".png");
+      temp.resize((int)spacing, (int)spacing);
+      lightAnimals.add(temp);
+      temp = loadImage("data/skins/animals/1"+i+".png");
+      temp.resize((int)spacing, (int)spacing);
+      darkAnimals.add(temp);
     }
+
+    lightCurrent = lightAnimals;
+    darkCurrent = darkAnimals;
   }
 }

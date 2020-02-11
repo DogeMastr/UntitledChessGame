@@ -8,12 +8,12 @@ class ImageDB {
 
   ArrayList<PImage> lightAnimals;
   ArrayList<PImage> darkAnimals;
+  PImage temp;
 
   /*
 		LEMME EXPLAIN THE NAME
-   		p13
+   		13.png
 
-      p - peice
    		1 - team
    		3 - type
    	*/
@@ -29,17 +29,17 @@ class ImageDB {
     darkAnimals = new ArrayList<PImage>();
 
     for (int i = 0; i < 6; i++) {
-      PImage temp = loadImage("data/skins/default/0"+i+".png");
+      temp = loadImage("skins/default/0"+i+".png");
       temp.resize((int)spacing, (int)spacing);
       lightDefault.add(temp);
-      temp = loadImage("data/skins/default/1"+i+".png");
+      temp = loadImage("skins/default/1"+i+".png");
       temp.resize((int)spacing, (int)spacing);
       darkDefault.add(temp);
 
-      temp = loadImage("data/skins/animals/0"+i+".png");
+      temp = loadImage("skins/animals/0"+i+".png");
       temp.resize((int)spacing, (int)spacing);
       lightAnimals.add(temp);
-      temp = loadImage("data/skins/animals/1"+i+".png");
+      temp = loadImage("skins/animals/1"+i+".png");
       temp.resize((int)spacing, (int)spacing);
       darkAnimals.add(temp);
     }

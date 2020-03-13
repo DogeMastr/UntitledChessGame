@@ -49,8 +49,8 @@ boolean darkKingHidden = false;
 int gamemode = 0; //0 is default, 1 - hidden king,
 
 void setup() {
-  size(720, 1080); //remember when making android builds to make it fullscreen
-  //fullScreen();
+  //size(720, 1080); //remember when making android builds to make it fullscreen
+  fullScreen();
   if (width <= height) {
     spacing = width/10; //landscape or square
     rotation = true;
@@ -77,11 +77,19 @@ void setup() {
     }
   }
 
+  reset();
+  changeColour(0);
+}
+
+
+void reset(){
   turn = true;
   finished = false;
   menuOpen = false;
 
-  changeColour(0);
+  lightKingHidden = false;
+  darkKingHidden = false;
+
   initBoard(gamemode);
 }
 
@@ -738,7 +746,7 @@ void victoryMenu(int team) {
   text("Click anywhere to reset", width/2, height/2);
 
   if (bMousePressed()) {
-    setup();
+    reset();
   }
 }
 
@@ -768,8 +776,8 @@ void menu() {
     fill(0);
     text("MENU", spacing*11, height/2);
 
-    if (mouseY > spacing*10.5 && mouseY < spacing*11.5) {
-      if (mouseX < width/2 + spacing*1.5 && mouseX > width/2 - spacing*1.5) {
+    if (mouseX > spacing*9.5 && mouseX < spacing*12.5) {
+      if (mouseY < height/2 + spacing*0.5 && mouseY > height/2 - spacing*0.5) {
         if (menuMousePressed() && generalMenu == false) {
           generalMenu = true;
         }

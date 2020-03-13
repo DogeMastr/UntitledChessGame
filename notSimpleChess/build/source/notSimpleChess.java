@@ -65,8 +65,8 @@ boolean darkKingHidden = false;
 int gamemode = 0; //0 is default, 1 - hidden king,
 
 public void setup() {
-   //remember when making android builds to make it fullscreen
-  //fullScreen();
+  //size(720, 1080); //remember when making android builds to make it fullscreen
+  
   if (width <= height) {
     spacing = width/10; //landscape or square
     rotation = true;
@@ -93,9 +93,17 @@ public void setup() {
     }
   }
 
+  reset();
+}
+
+
+public void reset(){
   turn = true;
   finished = false;
   menuOpen = false;
+
+  lightKingHidden = false;
+  darkKingHidden = false;
 
   changeColour(0);
   initBoard(gamemode);
@@ -754,7 +762,7 @@ public void victoryMenu(int team) {
   text("Click anywhere to reset", width/2, height/2);
 
   if (bMousePressed()) {
-    setup();
+    reset();
   }
 }
 
@@ -784,8 +792,8 @@ public void menu() {
     fill(0);
     text("MENU", spacing*11, height/2);
 
-    if (mouseY > spacing*10.5f && mouseY < spacing*11.5f) {
-      if (mouseX < width/2 + spacing*1.5f && mouseX > width/2 - spacing*1.5f) {
+    if (mouseX > spacing*9.5f && mouseX < spacing*12.5f) {
+      if (mouseY < height/2 + spacing*0.5f && mouseY > height/2 - spacing*0.5f) {
         if (menuMousePressed() && generalMenu == false) {
           generalMenu = true;
         }
@@ -1100,7 +1108,7 @@ class Tile {
     }
   }
 }
-  public void settings() {  size(720, 1080); }
+  public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "notSimpleChess" };
     if (passedArgs != null) {
